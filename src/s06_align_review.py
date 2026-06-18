@@ -67,12 +67,12 @@ def play(path: Path):
 
 def interactive(verified: pd.DataFrame, seg_root: Path, log_rows: dict):
     pending = [r for _, r in verified.iterrows()
-               if r.clip not in log_rows or log_rows[r.clip].get("decision") in ("", "PENDING")]
+               if r["clip"] not in log_rows or log_rows[r["clip"]].get("decision") in ("", "PENDING")]
     log.info("%d clips to review (%d already done)", len(pending),
              len(verified) - len(pending))
     for i, r in enumerate(pending, 1):
-        clip_path = seg_root / r.source_id / r.clip
-        print(f"\n[{i}/{len(pending)}] {r.clip}  ({r.language_code})")
+        clip_path = seg_root / r.source_id / r["clip"]
+        print(f"\n[{i}/{len(pending)}] {r['clip']}  ({r.language_code})")
         print(f"  ASR: {r.transcript}")
         while True:
             print("  [p]lay  [a]ccept  [r]eject  [e]dit+accept  [s]kip  [q]uit")
@@ -80,7 +80,7 @@ def interactive(verified: pd.DataFrame, seg_root: Path, log_rows: dict):
             if c == "p":
                 play(clip_path)
             elif c == "a":
-                log_rows[r.clip] = dict(clip=r.clip, source_id=r.source_id,
+                log_rows[r["clip"]] = dict(clip=r["clip"], source_id=r.source_id,
                     language_code=r.language_code, decision="ACCEPT",
                     reason="clean single-speaker, transcript correct",
                     asr_transcript=r.transcript, final_transcript=r.transcript,
@@ -88,14 +88,14 @@ def interactive(verified: pd.DataFrame, seg_root: Path, log_rows: dict):
             elif c == "e":
                 newt = input(f"  corrected transcript:\n    [{r.transcript}]\n  > ").strip()
                 note = input("  edit note: ").strip()
-                log_rows[r.clip] = dict(clip=r.clip, source_id=r.source_id,
+                log_rows[r["clip"]] = dict(clip=r["clip"], source_id=r.source_id,
                     language_code=r.language_code, decision="ACCEPT",
                     reason="accepted with transcript correction",
                     asr_transcript=r.transcript, final_transcript=newt or r.transcript,
                     edit_note=note); break
             elif c == "r":
                 reason = input("  reject reason: ").strip() or "manual reject"
-                log_rows[r.clip] = dict(clip=r.clip, source_id=r.source_id,
+                log_rows[r["clip"]] = dict(clip=r["clip"], source_id=r.source_id,
                     language_code=r.language_code, decision="REJECT",
                     reason=reason, asr_transcript=r.transcript,
                     final_transcript="", edit_note=""); break
@@ -134,7 +134,7 @@ def main():
 
     if args.auto_stage:
         for _, r in verified.iterrows():
-            log_rows.setdefault(r.clip, dict(clip=r.clip, source_id=r.source_id,
+            log_rows.setdefault(r["clip"], dict(clip=r["clip"], source_id=r.source_id,
                 language_code=r.language_code, decision="PENDING", reason="",
                 asr_transcript=r.transcript, final_transcript=r.transcript,
                 edit_note=""))

@@ -1,0 +1,67 @@
+clip,source_id,language_requested,language_code,language_probability,n_speakers,transcript
+en_nptel_lecture_demo_0001.wav,en_nptel_lecture_demo,en-IN,en-IN,,1,"So, uh, you may recall that, um, when we discussed, uh, moist air or rather, uh, defined the specific enthalpy of moist air, we actually defined, um, uh, defined."
+en_nptel_lecture_demo_0003.wav,en_nptel_lecture_demo,en-IN,en-IN,,1,"Enthalpy of moist air, it would be in units of say kilojoule per kg air."
+en_nptel_lecture_demo_0004.wav,en_nptel_lecture_demo,en-IN,en-IN,,1,"Okay? 
+And we can then approximate  HA using the calorifically perfect assumption. 
+And HV may be approximated as HG of T. 
+However,  if you look at psychrometric applications, then"
+en_nptel_lecture_demo_0006.wav,en_nptel_lecture_demo,en-IN,en-IN,,1,CP times T2 plus omega times T2 and CP times T1 plus omega times T1. So you notice combinations like this. So let me just show this with a different color.
+en_nptel_lecture_demo_0008.wav,en_nptel_lecture_demo,en-IN,en-IN,,1,Omega times H2 and you notice this combination CP times T1.
+en_nptel_lecture_demo_0009.wav,en_nptel_lecture_demo,en-IN,en-IN,,1,"So you notice this combination. So,  what you are seeing is actually the specific enthalpy  defined on a per dry air basis or per kg of dry air basis. Here also you see the same thing."
+en_nptel_lecture_demo_0010.wav,en_nptel_lecture_demo,en-IN,en-IN,,1,"This term, uh, these two terms go together and then"
+en_nptel_lecture_demo_0011.wav,en_nptel_lecture_demo,en-IN,en-IN,,1,You can see that these terms go together.
+en_nptel_lecture_demo_0013.wav,en_nptel_lecture_demo,en-IN,en-IN,,1,Okay? This of course becomes Cp times T. This is hg of T.
+en_nptel_lecture_demo_0014.wav,en_nptel_lecture_demo,en-IN,en-IN,,1,Okay? And this is nothing but the specific enthalpy of moist air in units of say kilojoule per kg air.
+en_nptel_lecture_demo_0015.wav,en_nptel_lecture_demo,en-IN,en-IN,,1,"in the usual manner. But in the applications or examples that we have seen so far, we notice that it does not  when you when you look at the  the energy equation that we have applied to different examples."
+en_nptel_lecture_demo_0016.wav,en_nptel_lecture_demo,en-IN,en-IN,,1,"We notice that the terms do not appear in this combination but appear in a combination where the specific enthalpy is defined on a per unit mass of dry air. So basically instead of dividing by M, we divide by mass of dry air."
+en_nptel_lecture_demo_0017.wav,en_nptel_lecture_demo,en-IN,en-IN,,1,"So if you do that, then we end up with this combination HA plus omega times HV, which is in units of kilojoule per kg dry air."
+en_nptel_lecture_demo_0018.wav,en_nptel_lecture_demo,en-IN,en-IN,,1,"Okay? There is nothing wrong with this. Okay? So this is perfectly all right, okay? But this is specific enthalpy on a per unit mass of moist air. But in applications, when we apply energy balance to practical problems and"
+en_nptel_lecture_demo_0020.wav,en_nptel_lecture_demo,en-IN,en-IN,,1,"Okay? This is far more useful in psychrometric applications than this, okay? But there is nothing wrong with this also."
+en_nptel_lecture_demo_0021.wav,en_nptel_lecture_demo,en-IN,en-IN,,1,"And H star is what we will use in our examples from now onwards, okay? But we will clearly indicate. So this is actually H of moist air on specific."
+en_nptel_lecture_demo_0022.wav,en_nptel_lecture_demo,en-IN,en-IN,,1,specific enthalpy of moist air on a per kg on a per kg moist air basis or per kg air. This is H star which is specific enthalpy of moist air on a per kg dry air basis.
+en_nptel_lecture_demo_0023.wav,en_nptel_lecture_demo,en-IN,en-IN,,1,"Now, the new terms that we have introduced in psychrometry."
+en_nptel_lecture_demo_0024.wav,en_nptel_lecture_demo,en-IN,en-IN,,1,"Uh, or like this. So this is a list of new terms that we have introduced. First one is the, uh, the partial pressure of water vapor."
+en_nptel_lecture_demo_0026.wav,en_nptel_lecture_demo,en-IN,en-IN,,1,"PV psychrometric operations, unit operations remains constant. Generally, we assume the mixture pressure to be constant. Furthermore, in all the examples that we are working out, we have assumed the mixture pressure to be 1 atmosphere. But mixture pressure is usually a constant, which means that PV depends only on omega."
+en_nptel_lecture_demo_0028.wav,en_nptel_lecture_demo,en-IN,en-IN,,1,"So PV here depends on omega, P sat depends on T obviously. So fee depends on both."
+en_nptel_lecture_demo_0029.wav,en_nptel_lecture_demo,en-IN,en-IN,,1,"Temperature T and omega. By temperature, what we mean here is the dry bulb temperature."
+en_nptel_lecture_demo_0030.wav,en_nptel_lecture_demo,en-IN,en-IN,,1,May be written as HA plus omega HV and HA itself may be written as CP times T plus omega HG of T.
+en_nptel_lecture_demo_0033.wav,en_nptel_lecture_demo,en-IN,en-IN,,1,"So we may write for the water vapor, uh, partial pressure of water vapor times volume of mixture equal to MV or V times T. So V itself may be written in terms of the, uh,"
+en_nptel_lecture_demo_0034.wav,en_nptel_lecture_demo,en-IN,en-IN,,1,"Omega times RV times T over PV, and if I replace PV in favor of omega using this relationship, I get finally something like this."
+en_nptel_lecture_demo_0035.wav,en_nptel_lecture_demo,en-IN,en-IN,,1,"This one here. So if you look at this one again, I can gather CP times T2."
+en_nptel_lecture_demo_0037.wav,en_nptel_lecture_demo,en-IN,en-IN,,1,"And the dew point is nothing but T sat of PV, and PV depends on omega, so this depends on omega only."
+en_nptel_lecture_demo_0038.wav,en_nptel_lecture_demo,en-IN,en-IN,,1,"But the, uh, the important point that emerges from, uh, looking at the list of expressions here is that all the quantities depend only on two independent properties, T and omega."
+en_nptel_lecture_demo_0039.wav,en_nptel_lecture_demo,en-IN,en-IN,,1,"Which is the basis for developing the psychrometric chart. So basically the psychrometric chart has two axes, vertical axis is omega."
+en_nptel_lecture_demo_0040.wav,en_nptel_lecture_demo,en-IN,en-IN,,1,"And the horizontal axis is T, which is the dry bulb temperature, of course."
+en_nptel_lecture_demo_0041.wav,en_nptel_lecture_demo,en-IN,en-IN,,1,"Okay, some of them interestingly enough depend only on omega. Let me denote this using a slightly different color."
+en_nptel_lecture_demo_0042.wav,en_nptel_lecture_demo,en-IN,en-IN,,1,And this also depends only on omega. All the others seem to depend on T and omega.
+en_nptel_lecture_demo_0043.wav,en_nptel_lecture_demo,en-IN,en-IN,,1,"So basically the psychrometric chart, as you can see, has uh"
+en_nptel_lecture_demo_0044.wav,en_nptel_lecture_demo,en-IN,en-IN,,1,and dry bulb temperature on the x-axis and lines of constant values of each one of these variable is given in the is depicted in the chart. So basically the chart
+en_nptel_lecture_demo_0045.wav,en_nptel_lecture_demo,en-IN,en-IN,,1,"Plots, lines of constant PV, lines of constant phi, lines of constant H star, lines of constant VA, wet bulb temperature."
+en_nptel_lecture_demo_0046.wav,en_nptel_lecture_demo,en-IN,en-IN,,1,"Now, if you look at this and this, because these depend only on omega, uh, that means if the axis is vertical, this can be shown very nicely in the axis itself. So let me just erase this."
+en_nptel_lecture_demo_0047.wav,en_nptel_lecture_demo,en-IN,en-IN,,1,"So what is shown here, let me erase this also, just okay. So what is shown here, this is"
+en_nptel_lecture_demo_0048.wav,en_nptel_lecture_demo,en-IN,en-IN,,1,"PV, but instead of showing it in kilopascal, this is shown in millimeters of mercury, and the reference value 760 millimeters of mercury for barometric pressure is given there. So this can be easily converted into kilo units of kilopascal."
+en_nptel_lecture_demo_0049.wav,en_nptel_lecture_demo,en-IN,en-IN,,1,"So PV depends only on omega, since omega is the vertical axis, PV axis is also vertical."
+en_nptel_lecture_demo_0051.wav,en_nptel_lecture_demo,en-IN,en-IN,,1,"So this is the dew point, so this is dew point 0, dew point 10 degrees Celsius, 20 degrees Celsius and so on."
+en_nptel_lecture_demo_0052.wav,en_nptel_lecture_demo,en-IN,en-IN,,1,Okay? So that is shown parallel to the omega axis. So these two are straightforward and  so we had denoted them using this green color. So let me just show them again. So this is
+en_nptel_lecture_demo_0053.wav,en_nptel_lecture_demo,en-IN,en-IN,,1,"In green, this is in green. They are dependent only on omega, so we know we can show them in the vertical axis."
+en_nptel_lecture_demo_0056.wav,en_nptel_lecture_demo,en-IN,en-IN,,1,Quantity whose dependence on temperature we don't really know is this Hg.
+en_nptel_lecture_demo_0057.wav,en_nptel_lecture_demo,en-IN,en-IN,,1,"If you actually go to the property tables, let's say steam tables, and for the range of temperatures that we are going to likely encounter in psychrometric applications. We already mentioned that. So for the range of temperature,"
+en_nptel_lecture_demo_0059.wav,en_nptel_lecture_demo,en-IN,en-IN,,1,"kg, it varies only by about 100 kilojoule per kg, which is less than a 5% variation. So what happens is across the entire range of temperatures that we are seeing, Hg varies by less than 5%, which means that essentially Hg is a constant, more or less."
+en_nptel_lecture_demo_0060.wav,en_nptel_lecture_demo,en-IN,en-IN,,1,"Which means that all H star equal to constant lines will depend linearly on T and omega, which means the H star equal to constant line."
+en_nptel_lecture_demo_0061.wav,en_nptel_lecture_demo,en-IN,en-IN,,1,"is a line with a negative slope, meaning in the second quadrant."
+en_nptel_lecture_demo_0062.wav,en_nptel_lecture_demo,en-IN,en-IN,,1,"Of course, when we draw this line, you know, we are drawing accurately. But this argument that we are making is just to get an idea of what these lines will look like."
+en_nptel_lecture_demo_0063.wav,en_nptel_lecture_demo,en-IN,en-IN,,1,"Uh, this constant, uh, H star equal to constant, what does it look like on a, uh,"
+en_nptel_lecture_demo_0065.wav,en_nptel_lecture_demo,en-IN,en-IN,,1,"with the negative slope, which is why we have shown the chart in the second quadrant."
+en_nptel_lecture_demo_0066.wav,en_nptel_lecture_demo,en-IN,en-IN,,1,So H star equal to constant line looks like this. So it's uh these lines are uh it has a negative slope.
+en_nptel_lecture_demo_0068.wav,en_nptel_lecture_demo,en-IN,en-IN,,1,"Or we can argue that HG is more or less a constant, so H star equal to constant is going to appear more or less like a straight line in with a negative slope in the psychrometric chart."
+en_nptel_lecture_demo_0069.wav,en_nptel_lecture_demo,en-IN,en-IN,,1,"Now VA on the face of it appears to depend both on T and omega, but if you look at the second term here."
+en_nptel_lecture_demo_0071.wav,en_nptel_lecture_demo,en-IN,en-IN,,1,"Omega is typically a number of the order of about, you know, 0.001 to maybe 0.01, 0.02, not very big, okay, when compared to 0.622, which means that essentially this term"
+en_nptel_lecture_demo_0073.wav,en_nptel_lecture_demo,en-IN,en-IN,,1,"Uh, depends on omega and T. However, for the range of values of omega and T under consideration, the slope varies very little and hence lines of constant VA are nearly straight lines but steeper than lines of constant H star."
+en_nptel_lecture_demo_0074.wav,en_nptel_lecture_demo,en-IN,en-IN,,1,So the next expression that we are going to look at is the expression for wet bulb.
+en_nptel_lecture_demo_0075.wav,en_nptel_lecture_demo,en-IN,en-IN,,1,"Again, uh, this quantity, uh, omega minus omega, uh, wet bulb is likely to be a very, very small number, okay?"
+en_nptel_lecture_demo_0076.wav,en_nptel_lecture_demo,en-IN,en-IN,,1,"is going to be a very small number. So the second term probably is negligibly small, which means that lines of constant wet bulb temperature will coincide with the lines of constant H star. So as you can see here,"
+en_nptel_lecture_demo_0077.wav,en_nptel_lecture_demo,en-IN,en-IN,,1,"And you can see lines of constant wet bulb temperature here. So for example, 20 degrees Celsius, 15 degrees Celsius, 10 degrees Celsius. So you can see that they are almost parallel to"
+en_nptel_lecture_demo_0081.wav,en_nptel_lecture_demo,en-IN,en-IN,,1,Lines of constant H star and that is what we are seeing in the chart also. So basically these are the quantities  contours of which are depicted in the psychrometric chart.
+en_nptel_lecture_demo_0082.wav,en_nptel_lecture_demo,en-IN,en-IN,,1,"So let us summarize what we have said so far. So we have argued that lines of constant H are straight lines, almost straight lines with a negative slope in the second quadrant in T omega coordinate space."
+en_nptel_lecture_demo_0083.wav,en_nptel_lecture_demo,en-IN,en-IN,,1,And we also argued that 0.622 plus omega depends very weakly on omega because omega itself is very small in psychrometric application. So PV depends almost linearly on omega alone.
+en_nptel_lecture_demo_0085.wav,en_nptel_lecture_demo,en-IN,en-IN,,1,"The quantity omega minus omega wet bulb is usually very small, which means that lines of constant wet bulb temperature almost coincide with lines of constant mixture specific enthalpy in the psychrometric chart."

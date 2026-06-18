@@ -39,17 +39,17 @@ def build_manifest(cfg) -> pd.DataFrame:
     rows = []
     import soundfile as sf
     for _, r in acc.iterrows():
-        wav = clips_dir / r.clip
+        wav = clips_dir / r["clip"]
         if not wav.exists():
             continue
         info = sf.info(str(wav))
-        a = acoustic[acoustic.clip == r.clip]
-        t = transcripts[transcripts.clip == r.clip]
-        e = emo[emo.clip == r.clip]
+        a = acoustic[acoustic["clip"] == r["clip"]]
+        t = transcripts[transcripts["clip"] == r["clip"]]
+        e = emo[emo["clip"] == r["clip"]]
         pv = prov.get(r.source_id, {})
         rows.append({
-            "clip_id": Path(r.clip).stem,
-            "audio_path": f"data/clips/{r.clip}",
+            "clip_id": Path(r["clip"]).stem,
+            "audio_path": f"data/clips/{r['clip']}",
             "language": r.language_code,
             "text": r.final_transcript,
             "emotion": e.final_tag.iloc[0] if len(e) else cfg["emotion"]["default_tag"],

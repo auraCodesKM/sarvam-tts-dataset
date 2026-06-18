@@ -52,9 +52,9 @@ def main():
                 out = client.chat(system, text).strip().lower()
                 cand = next((t for t in tags if t in out), default)
             except Exception as e:
-                log.warning("[%s] LLM tag failed (%s) -> default", r.clip, e)
+                log.warning("[%s] LLM tag failed (%s) -> default", r["clip"], e)
                 cand = default
-        rows.append({"clip": r.clip, "llm_tag": cand, "final_tag": cand,
+        rows.append({"clip": r["clip"], "llm_tag": cand, "final_tag": cand,
                      "confirmed": False})
     df = pd.DataFrame(rows)
     out = REPO_ROOT / "data" / "emotion_tags.csv"

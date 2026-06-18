@@ -59,11 +59,15 @@ acoustic_qc:
 
 # --- Stage 4: Transcription (Sarvam STT) -------------------------------------
 transcribe:
-  model: saaras:v2.5            # Sarvam STT; see sarvam_client for endpoint
-  # mode is chosen per-clip: 'transcribe' default; Hindi clips with heavy
-  # English use code-mix handling. Word timestamps + diarization requested.
-  with_timestamps: true
-  with_diarization: true
+  model: saarika:v2.5           # Sarvam ASR (12 Indian langs incl en-IN, hi-IN).
+                                #   saaras:v3 is the translation model; saarika is
+                                #   the right choice for verbatim transcription.
+  with_timestamps: true         # word timestamps -> edge-trim + alignment QC
+  with_diarization: false       # FINDING: diarization is batch-API only (separate
+                                #   pricing), NOT available on the REST endpoint we
+                                #   use for <30s clips. Single-speaker is instead
+                                #   enforced by single-speaker SOURCE selection +
+                                #   the mandatory human listen pass. (see report)
 
 # --- Stage 5: Speaker + language verification --------------------------------
 verify:

@@ -82,13 +82,19 @@ class SarvamClient:
 
     # -- public ------------------------------------------------------------
     def transcribe(self, audio_path: str | Path, language_code: str,
-                   model: str = "saaras:v2.5", with_timestamps: bool = True,
-                   with_diarization: bool = True) -> dict:
-        """Transcribe one <30s clip. Cached by audio sha256 + params."""
+                   model: str = "saarika:v2.5", with_timestamps: bool = True,
+                   with_diarization: bool = False) -> dict:
+        """Transcribe one <30s clip. Cached by audio sha256 + params.
+
+        NOTE: diarization is NOT supported by the real-time/REST endpoint (it is
+        batch-API only, with separate pricing). `with_diarization` is therefore a
+        no-op here, kept for interface compatibility; single-speaker verification
+        is handled via single-speaker source curation + the human review pass.
+        """
         audio_path = Path(audio_path)
         digest = sha256_file(audio_path)
         ck = self._cache_key("stt", digest, language_code, model,
-                             str(with_timestamps), str(with_diarization))
+                             str(with_timestamps))
         cache_file = self.cache_dir / "stt" / f"{ck}.json"
         if cache_file.exists():
             return json.loads(cache_file.read_text())
@@ -97,8 +103,6 @@ class SarvamClient:
         data = {"language_code": language_code, "model": model}
         if with_timestamps:
             data["with_timestamps"] = "true"
-        if with_diarization:
-            data["with_diarization"] = "true"
         with open(audio_path, "rb") as fh:
             files = {"file": (audio_path.name, fh, "audio/wav")}
             resp = self._post(STT_URL, data=data, files=files)
@@ -108,7 +112,7 @@ class SarvamClient:
         log.info("STT (billed): %s -> cached %s", audio_path.name, ck)
         return resp
 
-    def chat(self, system: str, user: str, model: str = "sarvam-m",
+    def chat(self, system: str, user: str, model: str = "sarvam-30b",
              temperature: float = 0.2) -> str:
         """LLM chat completion (used for emotion-tag candidates). Cached."""
         ck = self._cache_key("chat", model, system, user, str(temperature))

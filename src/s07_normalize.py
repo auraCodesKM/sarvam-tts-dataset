@@ -60,9 +60,9 @@ def main():
 
     count = 0
     for _, r in accepted.iterrows():
-        meta = seg_idx.get(r.clip)
+        meta = seg_idx.get(r["clip"])
         if meta is None:
-            log.warning("no segment timing for %s; skipping", r.clip); continue
+            log.warning("no segment timing for %s; skipping", r["clip"]); continue
         source_id, start_s, end_s = meta
         y_full, sr = load_source(source_id)
         if y_full is None:
@@ -70,7 +70,7 @@ def main():
         y = trim_to_window(y_full, sr, start_s, end_s, pad_ms=pad_ms)
         y = normalize_loudness(y, sr, n["target_lufs"], n["peak_ceiling_dbfs"])
         y = pad_silence(y, sr, n["head_silence_ms"], n["tail_silence_ms"])
-        save_wav(out_dir / r.clip, y, sr,
+        save_wav(out_dir / r["clip"], y, sr,
                  subtype="PCM_16" if n["bit_depth"] == 16 else "PCM_24")
         count += 1
     log.info("Wrote %d normalized clips to %s", count, out_dir)

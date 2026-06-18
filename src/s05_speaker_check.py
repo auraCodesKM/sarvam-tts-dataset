@@ -1,10 +1,14 @@
-"""Stage 5 — Single-speaker + language-match verification (free, from STT JSON).
+"""Stage 5 — Language-match + transcript-sanity verification.
 
-Uses diarization already returned by Sarvam (no extra call):
-  * reject clips with > max_speakers distinct speaker_ids,
+NOTE (real API constraint): per-clip diarization is NOT available on Sarvam's REST
+endpoint (batch-API only, separate pricing). So single-speaker is enforced upstream
+by single-speaker SOURCE selection and downstream by the human listen pass (s06),
+not by an automated per-clip diarization gate. Here we keep the checks the REST
+response *does* support:
   * reject clips whose detected language_code != requested language,
-  * reject clips with language_probability < floor,
-  * reject empty transcripts.
+  * reject clips with language_probability < floor (when present; saarika returns
+    it only in auto-detect mode, so it is often absent and the check is skipped),
+  * reject empty / near-empty transcripts (a strong junk-clip signal).
 
 Output: data/verified.csv with verify_pass + verify_reasons.
 """
@@ -26,6 +30,8 @@ def main():
 
     def check(r):
         reasons = []
+        # diarization unavailable via REST -> n_speakers defaults to 1; flag only
+        # if a value >max somehow appears (e.g. from a future batch-API pass).
         if (r.get("n_speakers") or 1) > v["max_speakers"]:
             reasons.append(f"multi_speaker({int(r['n_speakers'])})")
         if str(r.get("language_code")) != str(r.get("language_requested")):
@@ -33,7 +39,8 @@ def main():
         lp = r.get("language_probability")
         if pd.notna(lp) and float(lp) < v["min_language_probability"]:
             reasons.append(f"low_lang_prob({float(lp):.2f})")
-        if not str(r.get("transcript") or "").strip():
+        txt = str(r.get("transcript") or "").strip()
+        if len(txt) < 3:
             reasons.append("empty_transcript")
         return pd.Series({"verify_pass": len(reasons) == 0,
                           "verify_reasons": ";".join(reasons)})

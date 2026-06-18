@@ -57,7 +57,7 @@ def main():
     seg_root = REPO_ROOT / cfg["paths"]["segments_dir"]
     rows = []
     for _, r in qc.iterrows():
-        clip_path = seg_root / r.source_id / r.clip
+        clip_path = seg_root / r.source_id / r["clip"]
         lang = lang_of(r.source_id, sources)
         try:
             resp = client.transcribe(clip_path, language_code=lang,
@@ -65,10 +65,10 @@ def main():
                                      with_timestamps=tc["with_timestamps"],
                                      with_diarization=tc["with_diarization"])
         except Exception as e:
-            log.error("[%s] transcribe failed: %s", r.clip, e)
+            log.error("[%s] transcribe failed: %s", r["clip"], e)
             continue
         rows.append({
-            "clip": r.clip, "source_id": r.source_id,
+            "clip": r["clip"], "source_id": r.source_id,
             "language_requested": lang,
             "language_code": resp.get("language_code", lang),
             "language_probability": resp.get("language_probability"),

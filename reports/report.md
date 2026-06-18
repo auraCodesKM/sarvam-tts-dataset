@@ -66,10 +66,16 @@ the same funnel across all sources.
 |---|---:|---:|
 | Segmented (VAD utterances) | 88 | 100.0% |
 | Passed acoustic QC (pre-ASR) | 63 | 71.6% |
-| Transcribed (Sarvam STT) | *pending key* | — |
-| Passed single-speaker + language | *pending* | — |
+| Transcribed (Sarvam `saarika:v2.5`) | 63 | 71.6% |
+| Passed language + transcript-sanity | 63 | 71.6% |
+| Normalized to 24 kHz mono | 63 | 71.6% |
 | Human-reviewed (decided) | *pending listen* | — |
 | **Accepted into dataset** | *pending* | — |
+
+This one source yields **63 clips = 10.9 min** of clean 24 kHz mono audio (median
+clip 10.3 s), so ~3 parts of the (single-speaker) Psychrometry course cover the
+30-minute English target. All 63 transcribed cleanly and passed the language gate;
+final acceptance is the human listen pass.
 
 *(Funnel auto-generated to `reports/funnel.csv`; figures in `reports/figures/`.)*
 
@@ -123,6 +129,11 @@ diagnosed, and corrected — rather than tuned silently to "look good."
 *(Transcript/emotion observations are populated during the Sarvam-transcription +
 human-review pass; the methodology and tooling are complete and described here.)*
 
+- **Disfluency capture (real).** Sarvam `saarika:v2.5` transcribes verbatim,
+  including filler words: *"So, uh, you may recall that, um, when we discussed…"*
+  For a TTS dataset this is the **correct** behaviour (text must match the audio), but
+  it surfaces a curation choice: filler-heavy clips are weak TTS units. The review
+  pass can down-select or keep them faithfully tagged — we keep the transcript exact.
 - **Expected transcription errors.** NPTEL lectures carry domain jargon
   (thermodynamics, CS, math). These are predictable ASR-error hot-spots: technical
   terms, acronyms, numerals/units, and English↔Hindi code-mixing in the Hindi set.
@@ -142,8 +153,9 @@ human-review pass; the methodology and tooling are complete and described here.)
 
 - **Pre-ASR acoustic gating** — rejecting bad audio for free before spending any
   Sarvam credit; the credit-frugal core of the design.
-- **Reusing diarization for single-speaker verification** — a quality gate at zero
-  marginal cost.
+- **Single-speaker by construction** — anchoring on single-speaker lecture sources
+  made the (REST-unavailable) per-clip diarization gate unnecessary; the listen pass
+  is the backstop for any in-room cross-talk.
 - **SHA-256 response caching** — iteration and re-runs cost nothing; the whole build
   is reproducible from cache.
 - **Programmatic license verification** — turning "is this reusable?" from a claim
@@ -174,6 +186,14 @@ human-review pass; the methodology and tooling are complete and described here.)
   license + multi-speaker/music). Documented in `config/sources.yaml:rejected`.
 - **Text-only emotion tagging is weak** — confirmed expectation: transcripts rarely
   reveal affect, hence the human-confirm step.
+- **API contract surprises (resolved against the live API).** Three documented
+  assumptions were wrong and were fixed by testing the endpoints directly: (1) the STT
+  model is `saarika:v2.5`, not `saaras:v2.5` (`saaras` is the *translation* model);
+  (2) **diarization is not available on the real-time/REST endpoint** — it is
+  batch-API-only with separate pricing, so the planned free per-clip single-speaker
+  gate had to be replaced by single-speaker *source selection* + the human listen pass;
+  (3) the LLM `sarvam-m` is deprecated → `sarvam-30b`. Lesson: validate the API
+  contract with one live call per surface before building stages on top of it.
 
 ## 6. Future improvements
 

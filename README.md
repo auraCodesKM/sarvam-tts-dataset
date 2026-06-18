@@ -23,7 +23,7 @@ assignment.
 | **Programmatic license verification** — every source must carry YouTube's *Creative Commons Attribution (reuse allowed)* flag, checked at fetch and recorded per clip | `src/s01_fetch.py`, `manifest.csv:license` |
 | **A documented quality funnel** — clip counts dying at each gate | `reports/funnel.csv`, report §2 |
 | **Pre-ASR acoustic gate** — SNR/clipping/loudness filters run *before* any paid API call (0-credit rejection of bad audio) | `src/s03_acoustic_qc.py` |
-| **Free single-speaker verification** — reuses Sarvam's diarization output, no extra calls | `src/s05_speaker_check.py` |
+| **Single-speaker by construction** — single-speaker lecture sources + a language/transcript-sanity gate (REST diarization is batch-only; documented) | `src/s05_speaker_check.py` |
 | **Human-in-the-loop review log** — accept/reject + reason + transcript edit for every clip | `review/review_log.csv` |
 | **Quantified ASR quality (WER/CER)** — Sarvam ASR vs. human-corrected text | `reports/wer.json` |
 | **Real QC iterations** — e.g. a v0 peak-threshold that wrongly rejected 94% of clips, diagnosed and fixed | report §3 |
