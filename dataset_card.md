@@ -26,8 +26,10 @@ with a curation-first methodology — every clip reviewed by ear as if it would
 train a production TTS model.
 
 - **Pipeline & report:** https://github.com/auraCodesKM/sarvam-tts-dataset
-- **License:** CC-BY-4.0 (sourced from YouTube **CC-BY**-flagged NPTEL lectures;
-  per-clip attribution in the manifest).
+- **License:** CC-BY-4.0. Sources are YouTube **CC-BY**-flagged, single-speaker:
+  Indian English from **NPTEL** *Psychrometry* lectures (`nptelhrd`), Hindi from
+  **Sadhguru Hindi** discourses (Isha Foundation). Per-clip attribution + the
+  recorded license flag are in the manifest.
 
 ## Schema
 
@@ -70,6 +72,6 @@ WER vs. human-corrected transcripts (`reports/wer.json`).
   title  = {Indian English + Hindi TTS Dataset (60 min, curation-first)},
   author = {Thakur, Kavin},
   year   = {2026},
-  note   = {Sources: NPTEL (CC-BY). Pipeline: github.com/auraCodesKM/sarvam-tts-dataset}
+  note   = {Sources: NPTEL + Sadhguru Hindi (CC-BY). Pipeline: github.com/auraCodesKM/sarvam-tts-dataset}
 }
 ```

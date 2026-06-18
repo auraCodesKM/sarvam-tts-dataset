@@ -79,9 +79,13 @@ run_pipeline.py   orchestrator   |   validate_dataset.py   invariant checks
 
 ## Design choices (full rationale in `PLAN.md` / report)
 
-- **Sources: NPTEL university lectures** (Indian English + Hindi). Single speaker per
-  course, controlled recording, abundant, and — decisively — **CC-BY on YouTube**, so
-  reuse is unambiguous and verifiable. Dataset released **CC-BY-4.0** with per-clip
+- **Sources (single-speaker, CC-BY-on-YouTube, verified per clip):**
+  - *Indian English* — **NPTEL** *Psychrometry* lectures (`nptelhrd`), one instructor.
+  - *Hindi* — **Sadhguru Hindi** discourses (Isha Foundation), one speaker.
+  Both carry YouTube's CC-BY flag, so reuse is unambiguous and machine-verifiable.
+  CC-BY Hindi *lectures* proved scarce; the Hindi source was found via YouTube's
+  native CC search filter, choosing a real human voice over AI-narrated channels and
+  rejecting multi-speaker/dubbed audio. Dataset released **CC-BY-4.0** with per-clip
   attribution.
 - **Sentence-level 4–18 s clips** (VAD), not arbitrary 30/60 s cuts — coherent TTS
   units with clean silence edges (LJSpeech/Hi-Fi TTS norm).

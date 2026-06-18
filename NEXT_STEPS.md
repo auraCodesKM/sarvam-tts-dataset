@@ -1,47 +1,47 @@
 # Project status & how to finish
 
-The pipeline, curation framework, docs, report, and public repo are **done and
-validated**. The remaining work is exactly the two things that *require a human*:
-a **Sarvam API key** (for transcription) and **listening** (the graded curation core).
+A complete **62.6-min bilingual candidate pool is built, transcribed, and verified**.
+The only remaining work is the one thing that *requires a human*: **listening** (the
+graded curation core), then a one-command publish.
 
-## ✅ Done (autonomous)
-- Full pipeline `src/s01…s09` + `analyze.py`, validated end-to-end through the
-  credit-free stages on a real source (88 VAD segments → 63 passed acoustic QC,
-  median SNR 38 dB).
-- Programmatic **CC-BY license verification** (`s01`); curated, verified English
-  source: the nptelhrd **Psychrometry** course (Parts 1–5, ~127 min, one speaker).
-- Report (`reports/report.pdf`), dataset card (`dataset_card.md`), README, tests
-  (6 passing), CI, public repo: https://github.com/auraCodesKM/sarvam-tts-dataset
+## ✅ Done
+- Full pipeline `src/s01…s09` + `analyze.py`, run end-to-end against the **live Sarvam
+  API** (475 clips transcribed; STT + LLM contracts validated).
+- **CC-BY license verified per clip.** Sources (single-speaker):
+  - English — NPTEL *Psychrometry* (`nptelhrd`), 36.2 min / 227 clips.
+  - Hindi — Sadhguru Hindi discourses, 26.4 min / 248 clips.
+- Funnel: 582 VAD segments → 475 acoustic-QC pass → 475 transcribed → 475 verified.
+- All 475 staged in `review/review_log.csv` (ASR pre-filled, quality-prioritized).
+- Report PDF, dataset card, README, tests (6 passing), CI, public repo.
 
 ## ▶️ To complete (needs you)
 
-1. **Get a Sarvam key** at https://dashboard.sarvam.ai → API Keys. Request extra
-   credits the same day (only transcription spends credits). Put it in `.env`:
+1. **The review pass — the graded core.** Listen, accept/reject, fix transcript text:
    ```
-   cp .env.example .env      # then set SARVAM_API_KEY=...
+   make review        # = python -m src.s06_align_review --interactive
    ```
-2. **Pick a CC-BY Hindi source** (the one open curation item). Browse nptelhrd /
-   NPTEL-NOC IITM for a Hindi "(in Hindi)/हिंदी" lecture and verify it:
-   ```
-   # paste the URL into config/sources.yaml under `hindi:`, then:
-   .venv/bin/python -m src.s01_fetch --dry-run     # confirms the CC-BY flag
-   ```
-3. **Run the automated chain**, then **review by ear** (the graded core):
-   ```
-   make all                                  # fetch → segment → QC → transcribe → verify
-   .venv/bin/python -m src.s06_align_review --interactive   # listen, accept/reject, fix text
-   ```
-   Aim for ~30 min accepted per language. The harness is resumable.
-4. **Confirm emotion tags by ear**: run `make emotion`, then open
-   `data/emotion_tags.csv` and set `confirmed=True` / correct `final_tag` where the
-   audio disagrees with the LLM candidate.
-5. **Finalize + publish**:
-   ```
-   make post           # normalize → build manifest → analyze (funnel/WER/figures) → validate
-   make push           # publish the public HF dataset (auraCodes/...)
-   .venv/bin/python reports/build_pdf.py    # regenerate the PDF with final numbers
-   ```
-6. **Verify**: round-trip-load the HF dataset and listen to ~10 random clips/language.
+   Clips are ordered best-first (ideal length, high SNR, low filler) and the harness
+   shows accepted-minutes per language so you can stop at ~30 min English / ~25 min
+   Hindi. Resumable; saves after every decision. Keys: [p]lay [a]ccept [e]dit+accept
+   [r]eject [s]kip [q]uit.
 
-That's it — the report's "pending" cells fill in automatically from the CSVs once
-the review pass is done.
+2. **Confirm emotion tags by ear:** `make emotion`, then in `data/emotion_tags.csv`
+   set `confirmed=True` and fix any `final_tag` the audio disagrees with.
+
+3. **Finalize + publish (one shot):**
+   ```
+   make post          # normalize(24kHz, edge-trim) → manifest → WER/funnel/figures → validate
+   make push          # publish the public HF dataset: auraCodes/indian-english-hindi-tts-60min
+   .venv/bin/python reports/build_pdf.py     # regenerate PDF with final numbers
+   git add -A && git commit -m "Final reviewed dataset" && git push
+   ```
+
+4. **Verify:** round-trip-load the HF dataset; listen to ~10 random clips/language.
+
+## 📤 Submit (3 links, to wherever Sarvam instructed)
+1. 🤗 `https://huggingface.co/datasets/auraCodes/indian-english-hindi-tts-60min`
+2. 💻 `https://github.com/auraCodesKM/sarvam-tts-dataset`
+3. 📄 `reports/report.pdf`
+
+The report's "pending" cells (acceptance counts, WER, emotion distribution) fill in
+automatically from the CSVs once review is done.
