@@ -24,3 +24,6 @@ data/hf_dataset/
 
 # local listening samples (audio, not for repo)
 review_samples/
+
+# source-audition slices (audio, not for repo)
+data/audition/

@@ -76,81 +76,36 @@ english:
 # HINDI (~30 min target)
 # ----------------------------------------------------------------------------
 hindi:
-  # HONEST STATUS: a CC-BY-FLAGGED Hindi *lecture* on official channels was not
-  # found by automated search in the time box (results were promo/registration
-  # clips, not lectures). Hindi requires a human selection pass — which the brief
-  # expects anyway. Two defensible routes, in order of preference:
+  # SOURCE SELECTION (v2, after manual review rejected the v1 discourse source).
+  # v1 used "Sadhguru Hindi" discourses; manual TTS-quality review found audience
+  # Q&A, multi-speaker segments, PA-system/processed timbre, and inconsistent
+  # acoustics — passable for ASR but unfit for TTS. Lesson: SOURCE TYPE dominates.
+  # Public talks structurally carry audience/PA/multi-speaker; studio narration
+  # does not. v2 therefore requires a single-speaker, studio narration source.
   #
-  #  (A) NPTEL Hindi/Hindi-translated course that DOES carry the YouTube CC-BY
-  #      flag. Browse the nptelhrd / NPTEL-NOC IITM playlists for "(in Hindi)" /
-  #      "हिंदी" titles and dry-run each:  python -m src.s01_fetch --dry-run
-  #      Only CC-BY-flagged URLs pass the gate. Preferred: same machine-verifiable
-  #      basis as English; release stays CC-BY-4.0.
-  #
-  #  (B) A Hindi channel that CC-licenses its uploads (verify the flag). NOTE:
-  #      public-domain *text* (e.g. Premchand, d.1936, PD in India) does NOT make
-  #      an audiobook PD — the narrator's RECORDING has its own copyright. So an
-  #      audiobook is only usable if the channel itself CC-licenses it. Do not
-  #      assume PD text => PD audio.
-  # SELECTED via YouTube's native CC filter (search sp=EgIwAQ%3D%3D). NPTEL Hindi
-  # lectures with the CC-BY flag proved unavailable, so the Hindi anchor is the
-  # "Sadhguru Hindi" channel (Isha Foundation): a single real human speaker,
-  # professional studio audio, CC-BY-flagged, and abundant — parallel to the
-  # single-speaker English anchor. Picked over Hindi "Kahani"/audiobook channels
-  # because many of those use AI-generated narration (unsuitable for a TTS set).
-  # Caveats to confirm by ear: occasional English code-mix, a distinct accent, and
-  # possible intro music/audience — the acoustic gate + listen pass handle these.
-  - id: hi_sadhguru_inner_mgmt
-    url: "https://www.youtube.com/watch?v=wDE2iilwsB8"   # ~40 min
+  # Candidates were auditioned objectively with src/audition.py (SNR + non-speech
+  # gap-floor + speech density; see report). Winner: an individual narrator reading
+  # Premchand's essay — a monologue (no dialogue/dramatisation/audience), CC-BY,
+  # cleanest gap-floor (-52 dBFS, no music bed) and highest SNR of all candidates.
+  - id: hi_premchand_essay_p1
+    url: "https://www.youtube.com/watch?v=d02b11IOOq0"   # ~61 min
     language: hi-IN
-    channel: Sadhguru Hindi
-    speaker: "Sadhguru (Hindi discourse)"
-    content_type: discourse
-    expected_emotion: [serious, conversational, neutral, formal]
-    status: candidate                      # CC-BY verified; needs listen QC by ear
+    channel: Bhoopendra Pandey Hindi Channel
+    speaker: "Bhoopendra Pandey (single narrator)"
+    content_type: narration            # essay reading/explication — monologue
+    expected_emotion: [neutral, formal, serious]
+    status: candidate                  # CC-BY verified; audition SNR 29.7 / gap -52.2
     notes: >
-      One ~40-min talk likely covers the 30-min Hindi target after the funnel.
-      Transcribe with language_code hi-IN (codemix-tolerant). More CC-BY talks from
-      the same speaker if needed: QP3HFQCRuJU (~32m), s_TaBfnpXos, RBJE6SN7a_c,
-      nipOTU03stI, bukxmmWXZbw.
-    alt_ids: [QP3HFQCRuJU, s_TaBfnpXos, RBJE6SN7a_c, nipOTU03stI, bukxmmWXZbw]
-  - id: hi_sadhguru_karma
-    url: "https://www.youtube.com/watch?v=QP3HFQCRuJU"   # ~32 min, same speaker
-    language: hi-IN
-    channel: Sadhguru Hindi
-    speaker: "Sadhguru (Hindi discourse)"
-    content_type: discourse
-    expected_emotion: [serious, conversational, neutral]
-    status: candidate
-    notes: "Second talk, same speaker, to reach the 30-min Hindi target."
-  - id: hi_sadhguru_decision
-    url: "https://www.youtube.com/watch?v=s_TaBfnpXos"
-    language: hi-IN
-    channel: Sadhguru Hindi
-    speaker: "Sadhguru (Hindi discourse)"
-    content_type: discourse
-    expected_emotion: [conversational, neutral, serious]
-    status: candidate
-    notes: "Same speaker; discourse has long pauses -> ~50% speech density."
-  - id: hi_sadhguru_brieflife
-    url: "https://www.youtube.com/watch?v=RBJE6SN7a_c"
-    language: hi-IN
-    channel: Sadhguru Hindi
-    speaker: "Sadhguru (Hindi discourse)"
-    content_type: discourse
-    expected_emotion: [serious, conversational, neutral]
-    status: candidate
-    notes: "Solo talk; same speaker. (Replaced hi_sadhguru_purpose, a '[Hindi Dub]'
-            rejected for using a different dub-artist voice — see rejected/findings.)"
-  - id: hi_sadhguru_emptiness
-    url: "https://www.youtube.com/watch?v=nipOTU03stI"
-    language: hi-IN
-    channel: Sadhguru Hindi
-    speaker: "Sadhguru (Hindi discourse)"
-    content_type: discourse
-    expected_emotion: [conversational, neutral, serious]
-    status: candidate
-    notes: "Same speaker."
+      Premchand's essay "साहित्य का उद्देश्य" (text is public domain; the recording
+      is the channel's, CC-BY-flagged). Single narrator, studio mic, no audience,
+      no music bed, ~0.82 speech density -> ~50 min of speech in one 61-min source,
+      ample for the 30-min Hindi target with one consistent voice.
+  # Audition-ranked alternates if more material is needed (same QC pipeline):
+  #   Audio Cart  (TnccGlNP7X4) Premchand story  SNR 26.7 / gap -47.4
+  #   NCERT OFFICIAL (5TCSx_-85Ik) textbook audio SNR 25.9 / gap -49.0 (some
+  #     chapters dramatised -> verify single-speaker by ear before use)
+  # REJECTED on audition: The News Beak (PNLmea76Zt0) — continuous music bed
+  #   (gap-floor -29.7 dBFS); Amish Tripathi novel — copyrighted text.
 
 # ----------------------------------------------------------------------------
 # REJECTED source categories (documented judgment — goes in the report)
@@ -168,6 +123,16 @@ rejected:
   - source: "General Indian news / podcast clips"
     reason: "Standard YouTube license (no reuse right) + frequent multi-speaker
              overlap and background music. Excluded."
+  - source: "Public discourse / talks (Sadhguru Hindi — v1 Hindi source)"
+    reason: "CC-BY and high SNR, but manual TTS-quality review rejected it: audience
+             Q&A, multi-speaker segments, PA-system/processed timbre, inconsistent
+             acoustics. Fine for ASR, unfit for TTS. Replaced by studio narration.
+             Lesson: source TYPE (studio narration vs public talk) predicts TTS
+             quality better than any single acoustic metric."
+  - source: "Hindi narration with a music bed (e.g. The News Beak autobiography)"
+    reason: "Continuous background music under the voice (audition gap-floor
+             -29.7 dBFS vs -52 for clean narration). Music bleed is disqualifying
+             for TTS; caught objectively by src/audition.py before committing."
 
 # ----------------------------------------------------------------------------
 # FINDINGS from source curation (2026-06-18) — documented for the report

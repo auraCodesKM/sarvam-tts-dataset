@@ -45,7 +45,7 @@ Key properties:
 
 | Choice | Decision | Rationale |
 |---|---|---|
-| Sources | **NPTEL lectures** (Indian English + Hindi) | Single speaker per course; controlled recording; abundant; **CC-BY on YouTube** so reuse is unambiguous *and machine-verifiable*. |
+| Sources | **English:** NPTEL *Psychrometry* lectures (one instructor). **Hindi:** a single-narrator reading of Premchand's essay (studio narration). | Single-speaker, controlled recording, and **CC-BY on YouTube** so reuse is unambiguous *and machine-verifiable*. Source *type* (studio narration) chosen deliberately after a public-discourse source failed TTS review — see §5. |
 | Clip length | **4–18 s, VAD sentence-level** | Coherent TTS units with clean silence edges (LJSpeech avg ≈ 6.6 s); the brief explicitly allows "any combination totaling ~60 min." |
 | Final audio | **mono, 24 kHz, 16-bit, −23 LUFS, trimmed** | Modern neural-TTS standard; clips re-cut from the **original 48 kHz** source (no upsampling). |
 | Second language | **Hindi** | Highest Sarvam ASR accuracy among Indian languages and personally QA-able (Devanagari + romanized). |
@@ -57,29 +57,26 @@ Key properties:
 
 ### The quality funnel
 
-Every clip flows through ordered gates; we record how many die at each. Automated
-gates run **before** any paid API call. Numbers below are from the validated run on
-the first English source (a 21-minute NPTEL lecture); the full 60-minute run extends
-the same funnel across all sources.
-
-Full candidate pool across all sources (3 English Psychrometry parts + 4 Sadhguru
-Hindi talks):
+Every clip flows through ordered gates; we record how many survive each one.
+Automated gates run **before** any paid API call, so credits are spent only on
+plausibly-good audio. The table below is the full candidate pool across all sources
+(3 English *Psychrometry* parts + 1 Hindi narration source):
 
 | Stage | Clips | Surviving |
 |---|---:|---:|
-| Segmented (VAD utterances) | 582 | 100.0% |
-| Passed acoustic QC (pre-ASR) | 475 | 81.6% |
-| Transcribed (Sarvam `saarika:v2.5`) | 475 | 81.6% |
-| Passed language + transcript-sanity | 475 | 81.6% |
+| Segmented (VAD utterances) | 640 | 100.0% |
+| Passed acoustic QC (pre-ASR) | 558 | 87.2% |
+| Transcribed (Sarvam `saarika:v2.5`) | 558 | 87.2% |
+| Passed language + transcript-sanity | 558 | 87.2% |
 | Human-reviewed (decided) | *pending listen* | — |
 | **Accepted into dataset** | *pending* | — |
 
-The verified pool is **36.2 min English (227 clips) + 26.4 min Hindi (248 clips) =
-62.6 min**, every clip transcribed and language-checked, staged in
-`review/review_log.csv` for the human listen-and-correct pass (the final gate).
-Hindi landed slightly under 30 min: clean *single-speaker, CC-BY* Hindi is genuinely
-scarce on YouTube, and we chose not to pad it with multi-speaker dialogues, dubbed
-audio, or AI-narrated channels — a deliberate quality-over-size call per the brief.
+The verified pool is **36.2 min English (227 clips) + 33.1 min Hindi (331 clips) =
+69.3 min**, every clip transcribed and language-checked, staged in
+`review/review_log.csv` for the human listen-and-correct pass (the final gate). Both
+languages clear the 30-minute target with headroom for review attrition. The Hindi
+acoustic-QC pass rate (≈98% on the studio-narration source) is what lifts the overall
+funnel to 87%.
 A validation run earlier confirmed the back half: 63 of these normalize to clean
 24 kHz mono and `validate_dataset.py` passes all invariants. Acceptance counts and
 WER fill in from the CSVs after review.
@@ -149,13 +146,12 @@ human-review pass; the methodology and tooling are complete and described here.)
 - **Speaker/quality issues.** Even within a single-speaker lecture, some segments have
   room reverb, AC hum, or a cougher in the room; the SNR gate + manual listen catch
   these.
-- **Hindi audio is clean but low-density.** The Sadhguru Hindi talks pass acoustic QC
-  at ~93% with **median SNR 32.5 dB** (cleaner than the English source), and Sarvam
-  returns fluent, well-formed Devanagari — strong evidence the speech is clear. But the
-  discourse style has long contemplative pauses, so a 40-min video yields only ~14 min
-  of speech segments (≈35% density). A real limit SNR can't catch: **tonal background
-  music** is invisible to an energy-based SNR, so whether any music underlies the
-  speech is explicitly flagged for the human listen pass to confirm.
+- **SNR alone does not predict TTS suitability.** The first Hindi source (public
+  discourse) had a *high* median SNR of 32.5 dB yet failed manual TTS review (audience
+  Q&A, multi-speaker segments, PA-processed timbre). The replacement studio-narration
+  source profiles at **median SNR 45.3 dB with a 98% acoustic-QC pass rate** and a
+  non-speech gap-floor of −52 dBFS (clean silence in pauses, no music bed). The
+  decisive factors were source *type* and the non-speech gap-floor, not SNR — see §5.
 - **Emotion-tagging challenge.** Lecture/narration content is overwhelmingly
   `neutral`/`formal`/`conversational`. Affective tags (happy/sad/angry) are rare and
   inherently subjective from short clips. We tag conservatively and report the
@@ -176,6 +172,12 @@ human-review pass; the methodology and tooling are complete and described here.)
   into a recorded, per-clip fact.
 - **Calibrating thresholds against the data distribution** rather than guessing — the
   SNR histogram made the 22 dB choice obvious.
+- **Auditioning sources before committing** — the `src/audition.py` profile (SNR +
+  speech density + non-speech gap-floor) turned source selection into an objective,
+  cheap decision and caught failure modes (music beds) that SNR alone misses.
+- **Listening early.** The single most valuable QC step was a human listening to a
+  handful of clips, which is what exposed the v1 Hindi source's unsuitability before
+  it reached the dataset.
 
 ## 5. What didn't work / dead ends
 
@@ -189,16 +191,27 @@ human-review pass; the methodology and tooling are complete and described here.)
   does) and many don't. This is why licensing is verified *per video* and recorded in
   the manifest, never assumed from the channel. (A single CC-BY course conveniently
   gives one clean speaker for the entire English half.)
-- **Finding a clean CC-BY Hindi source took real curation work.** NPTEL Hindi lectures
-  were *not* CC-BY-flagged, and keyword search surfaced reuploads/promos. The unlock
-  was YouTube's **native Creative-Commons search filter** (`&sp=EgIwAQ%3D%3D`), which
-  returns only CC-licensed videos. From those I chose the **Sadhguru Hindi** channel
-  (a single real human speaker, professional studio audio) and deliberately **rejected**
-  two tempting alternatives: (a) Hindi "Kahani"/audiobook channels, many of which use
-  **AI-generated narration** (training a TTS model on synthetic speech is a trap), and
-  (b) a Sadhguru "[Hindi Dub]" video — a *dub artist*, not the speaker, which would
-  break single-speaker consistency. Both rejections are judgment calls a careless
-  pipeline would miss.
+- **The Hindi source took two iterations — the most instructive episode here.**
+  NPTEL Hindi lectures were *not* CC-BY-flagged, and keyword search surfaced
+  reuploads/promos. The unlock was YouTube's **native Creative-Commons search filter**
+  (`&sp=EgIwAQ%3D%3D`), which returns only CC-licensed videos.
+  - *v1 (rejected at manual review).* The first pick was a "Sadhguru Hindi" discourse
+    channel — CC-BY, single nominal speaker, 32.5 dB SNR, fluent transcripts. It
+    *looked* good on every automated metric. But listening to clips during review
+    exposed audience Q&A, multiple speakers, PA-system/processed timbre, and
+    inconsistent acoustics. Acceptable for ASR; unacceptable for TTS. The lesson:
+    **a public-talk source is structurally wrong for TTS, and no single acoustic
+    metric reveals that — only the ear, and the source *type*, do.**
+  - *v2 (selected).* I built a small **source-audition tool** (`src/audition.py`) that
+    profiles a 3-minute slice of each candidate on SNR, speech density, and the
+    **non-speech gap-floor** (RMS inside VAD pauses — a continuous-music/room detector).
+    Auditioning four narration candidates ranked them objectively and, for example,
+    caught a hidden **music bed** under one autobiography reading (gap-floor −29.7 dBFS
+    vs −52 for clean narration). The winner is a single narrator reading Premchand's
+    essay *"साहित्य का उद्देश्य"* (monologue → no dialogue, dramatisation, or audience;
+    text is public domain, recording CC-BY): **45.3 dB SNR, 98% QC pass, −52 dBFS
+    gap-floor.** Also rejected along the way: AI-narrated "Kahani" channels (synthetic
+    speech is a trap for a TTS set) and a copyrighted-novel audiobook.
 - **Public-domain text ≠ public-domain audio** — Premchand's *writing* is PD in India,
   but an audiobook *recording* of it is separately copyrighted. PD text is not a
   licensing shortcut for the Hindi audio; the source channel itself must CC-license.
