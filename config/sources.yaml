@@ -34,55 +34,75 @@ dataset_license: "CC-BY-4.0"   # compatible with NPTEL CC-BY-(SA) attribution
 # ----------------------------------------------------------------------------
 # INDIAN ENGLISH (~30 min target)
 # ----------------------------------------------------------------------------
+# ANCHOR: the nptelhrd "Psychrometry" course (single consistent instructor) is
+# CC-BY-flagged on YouTube — verified per-video via yt-dlp on 2026-06-18. Parts 1-5
+# total ~127 min of source audio: ample for the ~30-min English target after the
+# quality funnel, from ONE clean speaker. For speaker diversity, add 1-2 more
+# CC-BY-flagged nptelhrd courses (different professors); verify first with
+#   python -m src.s01_fetch --dry-run
+# because many older NPTEL uploads are NOT CC-flagged (see `findings` below).
 english:
-  - id: en_nptel_lecture_demo
-    url: "https://www.youtube.com/watch?v=IVz3N68fF1c"
+  - id: en_psychro_p5
+    url: "https://www.youtube.com/watch?v=IVz3N68fF1c"   # Part 5, ~21 min
     language: en-IN
     channel: nptelhrd
-    speaker: "NPTEL lecturer (Psychrometry course)"
+    speaker: "NPTEL instructor (Psychrometry)"
     content_type: lecture
     expected_emotion: [neutral, formal]
-    status: candidate           # license CC-BY verified 2026-06; needs listen QC
+    status: confirmed_license     # CC-BY verified + validated through acoustic QC
     notes: >
-      Single instructor, ~21 min, clean lecture audio. Verified license field ==
-      CC-BY via yt-dlp. Domain jargon (thermodynamics) is a known ASR-error
-      source — useful material for the "transcription errors" observations.
-
-  # Add 2-3 more English-medium NPTEL courses (different professors) here for
-  # speaker diversity. Recommended discovery: browse official channels
-  #   https://www.youtube.com/user/nptelhrd/playlists
-  #   https://www.youtube.com/@npteliitd
-  # pick humanities/management courses (cleaner diction, less jargon than
-  # engineering) e.g. soft-skills / English / management / philosophy lectures.
-  # Each added URL is auto license-checked at fetch.
+      Validated: 88 VAD segments, 63 passed acoustic QC (median SNR 38 dB).
+      Thermodynamics jargon is a deliberate ASR-error stress test.
+  - id: en_psychro_p1
+    url: "https://www.youtube.com/watch?v=es-2LA2bsu4"   # Part 1, ~30 min
+    language: en-IN
+    channel: nptelhrd
+    speaker: "NPTEL instructor (Psychrometry)"
+    content_type: lecture
+    expected_emotion: [neutral, formal]
+    status: confirmed_license     # CC-BY verified 2026-06
+    notes: "Same course/speaker as p5."
+  - id: en_psychro_p2
+    url: "https://www.youtube.com/watch?v=ewtFkNDw-5c"   # Part 2, ~17 min
+    language: en-IN
+    channel: nptelhrd
+    speaker: "NPTEL instructor (Psychrometry)"
+    content_type: lecture
+    expected_emotion: [neutral, formal]
+    status: confirmed_license
+    notes: "Same course/speaker. (Parts 3=xyJWx-HbXyI, 4=kSMMgwBP11c also CC-BY if more needed.)"
 
 # ----------------------------------------------------------------------------
 # HINDI (~30 min target)
 # ----------------------------------------------------------------------------
 hindi:
-  # NPTEL runs Hindi-medium and Hindi-translated courses (e.g. "Human Computer
-  # Interaction (In Hindi)"). Use the OFFICIAL channels only — reuploads
-  # ("MY SWAYAM", answer channels) are NOT CC-BY and the gate will reject them.
-  # Discovery: search the official channels for course titles containing
-  # "(in Hindi)" / "हिंदी". Anchor candidate to be confirmed by listening:
+  # HONEST STATUS: a CC-BY-FLAGGED Hindi *lecture* on official channels was not
+  # found by automated search in the time box (results were promo/registration
+  # clips, not lectures). Hindi requires a human selection pass — which the brief
+  # expects anyway. Two defensible routes, in order of preference:
+  #
+  #  (A) NPTEL Hindi/Hindi-translated course that DOES carry the YouTube CC-BY
+  #      flag. Browse the nptelhrd / NPTEL-NOC IITM playlists for "(in Hindi)" /
+  #      "हिंदी" titles and dry-run each:  python -m src.s01_fetch --dry-run
+  #      Only CC-BY-flagged URLs pass the gate. Preferred: same machine-verifiable
+  #      basis as English; release stays CC-BY-4.0.
+  #
+  #  (B) A Hindi channel that CC-licenses its uploads (verify the flag). NOTE:
+  #      public-domain *text* (e.g. Premchand, d.1936, PD in India) does NOT make
+  #      an audiobook PD — the narrator's RECORDING has its own copyright. So an
+  #      audiobook is only usable if the channel itself CC-licenses it. Do not
+  #      assume PD text => PD audio.
   - id: hi_nptel_hindi_course
-    url: "PLACEHOLDER_HINDI_NPTEL_VIDEO"   # fill from official channel; license auto-checked
+    url: "PASTE_CC_BY_HINDI_URL_HERE"      # license auto-verified at fetch
     language: hi-IN
     channel: nptelhrd / NPTEL-NOC IITM
     speaker: "NPTEL Hindi-medium instructor"
     content_type: lecture
     expected_emotion: [neutral, formal, conversational]
-    status: needs_human_pick     # requires listen to confirm clean single speaker
+    status: needs_human_pick               # find + confirm clean single speaker by ear
     notes: >
-      Hindi lecture content for code-mix handling (Hindi with English technical
-      terms). Use Sarvam 'codemix'-friendly transcription. Confirm by ear that
-      the recording is clean and single-speaker before committing.
-
-  # FALLBACK if NPTEL Hindi audio quality is poor on listen: public-domain Hindi
-  # literary audiobooks. Premchand (d. 1936) is public domain in India (life+60y),
-  # and expressive narration adds emotion diversity beyond neutral lectures.
-  # Must still pass the YouTube CC/PD license gate or be sourced from a
-  # confirmed public-domain channel (record the basis in notes).
+      Hindi lecture with English technical terms => code-mix. Transcribe with
+      language_code hi-IN; the verification gate enforces single-speaker + lang.
 
 # ----------------------------------------------------------------------------
 # REJECTED source categories (documented judgment — goes in the report)
@@ -100,3 +120,18 @@ rejected:
   - source: "General Indian news / podcast clips"
     reason: "Standard YouTube license (no reuse right) + frequent multi-speaker
              overlap and background music. Excluded."
+
+# ----------------------------------------------------------------------------
+# FINDINGS from source curation (2026-06-18) — documented for the report
+# ----------------------------------------------------------------------------
+findings:
+  - "NPTEL's YouTube CC-BY flagging is INCONSISTENT across uploads: the
+     'Psychrometry' course (nptelhrd) Parts 1-5 are all CC-BY, but many other
+     official lecture uploads carry the Standard license. Lesson: do not trust
+     the channel; verify every video's license flag (the s01 gate does this)."
+  - "Public-domain TEXT (Premchand etc.) does not imply a public-domain
+     RECORDING; an audiobook narration is separately copyrighted. PD text is not
+     a licensing shortcut for audio."
+  - "YouTube keyword search ranks reuploads/coaching channels above official
+     lecture content; anchoring on a known CC-BY course + the license gate is
+     more reliable than search ranking."

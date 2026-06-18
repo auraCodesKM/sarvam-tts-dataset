@@ -43,7 +43,7 @@ def main():
     names = [s[0] for s in STAGES]
     if args.smoke:
         # one-source end-to-end up to verification, capped transcription
-        src = args.source or "en_nptel_lecture_demo"
+        src = args.source or "en_psychro_p5"
         run("src.s01_fetch", ["--source", src])
         run("src.s02_segment", ["--source", src])
         run("src.s03_acoustic_qc", ["--source", src])

@@ -1,0 +1,26 @@
+name: ci
+
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install audio libs + minimal deps
+        run: |
+          sudo apt-get update && sudo apt-get install -y libsndfile1 ffmpeg
+          python -m pip install --upgrade pip
+          # only the deps the unit tests need (no torch/datasets -> fast CI)
+          pip install numpy==2.0.2 soundfile==0.13.1 pyloudnorm==0.1.1 \
+                      scipy==1.15.3 pyyaml==6.0.2 pandas==2.3.0 pytest
+      - name: Compile all modules
+        run: python -m py_compile src/*.py src/utils/*.py run_pipeline.py validate_dataset.py
+      - name: Unit tests
+        run: python -m pytest tests/ -q

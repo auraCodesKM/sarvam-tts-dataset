@@ -158,6 +158,17 @@ human-review pass; the methodology and tooling are complete and described here.)
   surfaced reupload and exam-coaching channels (not CC-BY) far more than official
   lecture content. Conclusion: anchor on *official channels* and let the license gate
   enforce correctness, rather than trusting search ranking.
+- **NPTEL's CC-BY flagging is inconsistent** — even within the official `nptelhrd`
+  channel, some lectures carry the YouTube CC-BY flag (the whole *Psychrometry* course
+  does) and many don't. This is why licensing is verified *per video* and recorded in
+  the manifest, never assumed from the channel. (A single CC-BY course conveniently
+  gives one clean speaker for the entire English half.)
+- **A CC-BY-flagged Hindi *lecture* was hard to find by automated search** in the time
+  box (results skewed to promo/registration clips). Hindi source selection is left as
+  an explicit human pass — appropriate, since the brief centres on human curation.
+- **Public-domain text ≠ public-domain audio** — Premchand's *writing* is PD in India,
+  but an audiobook *recording* of it is separately copyrighted. PD text is not a
+  licensing shortcut for the Hindi audio; the source channel itself must CC-license.
 - **Sourcing options ruled out.** TED/TEDx (CC-BY-**ND** forbids derivatives), All
   India Radio archives (paid license only), and general news/podcast clips (standard
   license + multi-speaker/music). Documented in `config/sources.yaml:rejected`.
