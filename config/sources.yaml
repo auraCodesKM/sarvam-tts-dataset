@@ -92,17 +92,64 @@ hindi:
   #      an audiobook PD — the narrator's RECORDING has its own copyright. So an
   #      audiobook is only usable if the channel itself CC-licenses it. Do not
   #      assume PD text => PD audio.
-  - id: hi_nptel_hindi_course
-    url: "PASTE_CC_BY_HINDI_URL_HERE"      # license auto-verified at fetch
+  # SELECTED via YouTube's native CC filter (search sp=EgIwAQ%3D%3D). NPTEL Hindi
+  # lectures with the CC-BY flag proved unavailable, so the Hindi anchor is the
+  # "Sadhguru Hindi" channel (Isha Foundation): a single real human speaker,
+  # professional studio audio, CC-BY-flagged, and abundant — parallel to the
+  # single-speaker English anchor. Picked over Hindi "Kahani"/audiobook channels
+  # because many of those use AI-generated narration (unsuitable for a TTS set).
+  # Caveats to confirm by ear: occasional English code-mix, a distinct accent, and
+  # possible intro music/audience — the acoustic gate + listen pass handle these.
+  - id: hi_sadhguru_inner_mgmt
+    url: "https://www.youtube.com/watch?v=wDE2iilwsB8"   # ~40 min
     language: hi-IN
-    channel: nptelhrd / NPTEL-NOC IITM
-    speaker: "NPTEL Hindi-medium instructor"
-    content_type: lecture
-    expected_emotion: [neutral, formal, conversational]
-    status: needs_human_pick               # find + confirm clean single speaker by ear
+    channel: Sadhguru Hindi
+    speaker: "Sadhguru (Hindi discourse)"
+    content_type: discourse
+    expected_emotion: [serious, conversational, neutral, formal]
+    status: candidate                      # CC-BY verified; needs listen QC by ear
     notes: >
-      Hindi lecture with English technical terms => code-mix. Transcribe with
-      language_code hi-IN; the verification gate enforces single-speaker + lang.
+      One ~40-min talk likely covers the 30-min Hindi target after the funnel.
+      Transcribe with language_code hi-IN (codemix-tolerant). More CC-BY talks from
+      the same speaker if needed: QP3HFQCRuJU (~32m), s_TaBfnpXos, RBJE6SN7a_c,
+      nipOTU03stI, bukxmmWXZbw.
+    alt_ids: [QP3HFQCRuJU, s_TaBfnpXos, RBJE6SN7a_c, nipOTU03stI, bukxmmWXZbw]
+  - id: hi_sadhguru_karma
+    url: "https://www.youtube.com/watch?v=QP3HFQCRuJU"   # ~32 min, same speaker
+    language: hi-IN
+    channel: Sadhguru Hindi
+    speaker: "Sadhguru (Hindi discourse)"
+    content_type: discourse
+    expected_emotion: [serious, conversational, neutral]
+    status: candidate
+    notes: "Second talk, same speaker, to reach the 30-min Hindi target."
+  - id: hi_sadhguru_decision
+    url: "https://www.youtube.com/watch?v=s_TaBfnpXos"
+    language: hi-IN
+    channel: Sadhguru Hindi
+    speaker: "Sadhguru (Hindi discourse)"
+    content_type: discourse
+    expected_emotion: [conversational, neutral, serious]
+    status: candidate
+    notes: "Same speaker; discourse has long pauses -> ~50% speech density."
+  - id: hi_sadhguru_purpose
+    url: "https://www.youtube.com/watch?v=bukxmmWXZbw"
+    language: hi-IN
+    channel: Sadhguru Hindi
+    speaker: "Sadhguru (Hindi discourse)"
+    content_type: discourse
+    expected_emotion: [conversational, neutral, serious]
+    status: candidate
+    notes: "Same speaker."
+  - id: hi_sadhguru_emptiness
+    url: "https://www.youtube.com/watch?v=nipOTU03stI"
+    language: hi-IN
+    channel: Sadhguru Hindi
+    speaker: "Sadhguru (Hindi discourse)"
+    content_type: discourse
+    expected_emotion: [conversational, neutral, serious]
+    status: candidate
+    notes: "Same speaker."
 
 # ----------------------------------------------------------------------------
 # REJECTED source categories (documented judgment — goes in the report)
@@ -135,3 +182,10 @@ findings:
   - "YouTube keyword search ranks reuploads/coaching channels above official
      lecture content; anchoring on a known CC-BY course + the license gate is
      more reliable than search ranking."
+  - "The reliable way to find CC-BY content is YouTube's native CC search filter
+     (append &sp=EgIwAQ%3D%3D to a results URL); keyword search alone misses it.
+     This unlocked the Hindi half after NPTEL Hindi proved un-CC-flagged."
+  - "Hindi 'Kahani'/audiobook channels are risky: many now use AI-generated TTS
+     narration — unusable as training data for a TTS model. Verify a human voice."
+  - "Rejected a Sadhguru '[Hindi Dub]' video: dubbing introduces a different
+     (dub-artist) speaker, breaking single-speaker consistency."

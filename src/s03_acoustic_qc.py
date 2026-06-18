@@ -82,6 +82,10 @@ def main():
             rows.append(qc_clip(clip, model, cfg))
     df = pd.DataFrame(rows)
     out = REPO_ROOT / "data" / "acoustic_qc.csv"
+    if args.source and out.exists():  # merge: replace only this source's rows
+        prev = pd.read_csv(out)
+        prev = prev[prev.source_id != args.source]
+        df = pd.concat([prev, df], ignore_index=True)
     df.to_csv(out, index=False)
     n_pass = int(df["qc_pass"].sum()) if len(df) else 0
     log.info("Acoustic QC: %d clips, %d pass (%.0f%%) -> %s",

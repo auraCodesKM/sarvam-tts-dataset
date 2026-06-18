@@ -77,6 +77,10 @@ def main():
         })
     df = pd.DataFrame(rows)
     out = REPO_ROOT / "data" / "transcripts.csv"
+    if (args.source or args.limit) and out.exists():  # merge partial runs
+        prev = pd.read_csv(out)
+        prev = prev[~prev["clip"].isin(df["clip"])] if len(df) else prev
+        df = pd.concat([prev, df], ignore_index=True)
     df.to_csv(out, index=False)
     log.info("Transcribed %d clips -> %s (cache: %s)", len(df), out,
              client.cache_dir / "stt")

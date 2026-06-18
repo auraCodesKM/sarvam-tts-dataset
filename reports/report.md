@@ -62,20 +62,24 @@ gates run **before** any paid API call. Numbers below are from the validated run
 the first English source (a 21-minute NPTEL lecture); the full 60-minute run extends
 the same funnel across all sources.
 
+Full candidate pool across all sources (3 English Psychrometry parts + 4 Sadhguru
+Hindi talks):
+
 | Stage | Clips | Surviving |
 |---|---:|---:|
-| Segmented (VAD utterances) | 88 | 100.0% |
-| Passed acoustic QC (pre-ASR) | 63 | 71.6% |
-| Transcribed (Sarvam `saarika:v2.5`) | 63 | 71.6% |
-| Passed language + transcript-sanity | 63 | 71.6% |
-| Normalized to 24 kHz mono | 63 | 71.6% |
+| Segmented (VAD utterances) | 560 | 100.0% |
+| Passed acoustic QC (pre-ASR) | 455 | 81.2% |
+| Transcribed (Sarvam `saarika:v2.5`) | 447 | 79.8% |
+| Passed language + transcript-sanity | 447 | 79.8% |
 | Human-reviewed (decided) | *pending listen* | — |
 | **Accepted into dataset** | *pending* | — |
 
-This one source yields **63 clips = 10.9 min** of clean 24 kHz mono audio (median
-clip 10.3 s), so ~3 parts of the (single-speaker) Psychrometry course cover the
-30-minute English target. All 63 transcribed cleanly and passed the language gate;
-final acceptance is the human listen pass.
+The verified pool is **36.2 min English (227 clips) + 23.5 min Hindi (220 clips) =
+59.7 min**, every clip transcribed and language-checked, staged in
+`review/review_log.csv` for the human listen-and-correct pass (the final gate).
+A validation run earlier confirmed the back half: 63 of these normalize to clean
+24 kHz mono and `validate_dataset.py` passes all invariants. Acceptance counts and
+WER fill in from the CSVs after review.
 
 *(Funnel auto-generated to `reports/funnel.csv`; figures in `reports/figures/`.)*
 
@@ -141,7 +145,14 @@ human-review pass; the methodology and tooling are complete and described here.)
   re-types, and every edit is logged — yielding a measured WER (`reports/wer.json`).
 - **Speaker/quality issues.** Even within a single-speaker lecture, some segments have
   room reverb, AC hum, or a cougher in the room; the SNR gate + manual listen catch
-  these. Cross-talk during Q&A is caught by the diarization gate.
+  these.
+- **Hindi audio is clean but low-density.** The Sadhguru Hindi talks pass acoustic QC
+  at ~93% with **median SNR 32.5 dB** (cleaner than the English source), and Sarvam
+  returns fluent, well-formed Devanagari — strong evidence the speech is clear. But the
+  discourse style has long contemplative pauses, so a 40-min video yields only ~14 min
+  of speech segments (≈35% density). A real limit SNR can't catch: **tonal background
+  music** is invisible to an energy-based SNR, so whether any music underlies the
+  speech is explicitly flagged for the human listen pass to confirm.
 - **Emotion-tagging challenge.** Lecture/narration content is overwhelmingly
   `neutral`/`formal`/`conversational`. Affective tags (happy/sad/angry) are rare and
   inherently subjective from short clips. We tag conservatively and report the
@@ -175,9 +186,16 @@ human-review pass; the methodology and tooling are complete and described here.)
   does) and many don't. This is why licensing is verified *per video* and recorded in
   the manifest, never assumed from the channel. (A single CC-BY course conveniently
   gives one clean speaker for the entire English half.)
-- **A CC-BY-flagged Hindi *lecture* was hard to find by automated search** in the time
-  box (results skewed to promo/registration clips). Hindi source selection is left as
-  an explicit human pass — appropriate, since the brief centres on human curation.
+- **Finding a clean CC-BY Hindi source took real curation work.** NPTEL Hindi lectures
+  were *not* CC-BY-flagged, and keyword search surfaced reuploads/promos. The unlock
+  was YouTube's **native Creative-Commons search filter** (`&sp=EgIwAQ%3D%3D`), which
+  returns only CC-licensed videos. From those I chose the **Sadhguru Hindi** channel
+  (a single real human speaker, professional studio audio) and deliberately **rejected**
+  two tempting alternatives: (a) Hindi "Kahani"/audiobook channels, many of which use
+  **AI-generated narration** (training a TTS model on synthetic speech is a trap), and
+  (b) a Sadhguru "[Hindi Dub]" video — a *dub artist*, not the speaker, which would
+  break single-speaker consistency. Both rejections are judgment calls a careless
+  pipeline would miss.
 - **Public-domain text ≠ public-domain audio** — Premchand's *writing* is PD in India,
   but an audiobook *recording* of it is separately copyrighted. PD text is not a
   licensing shortcut for the Hindi audio; the source channel itself must CC-license.
