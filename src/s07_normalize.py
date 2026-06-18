@@ -50,6 +50,14 @@ def main():
     accepted = review[review.decision == "ACCEPT"]
     seg_idx = _segments_index(seg_root)
     pad_ms = cfg["review"]["edge_trim_pad_ms"]
+    # speech span (relative to each clip) from ASR timestamps -> tighten edges
+    tr_path = REPO_ROOT / "data" / "transcripts.csv"
+    span = {}
+    if tr_path.exists():
+        tdf = pd.read_csv(tr_path)
+        if "speech_start_s" in tdf:
+            for _, t in tdf.iterrows():
+                span[t["clip"]] = (t.get("speech_start_s"), t.get("speech_end_s"))
     log.info("Normalizing %d accepted clips -> %d kHz mono (re-cut from source)",
              len(accepted), n["sample_rate"] // 1000)
 
@@ -67,7 +75,15 @@ def main():
         y_full, sr = load_source(source_id)
         if y_full is None:
             log.warning("missing original for %s", source_id); continue
-        y = trim_to_window(y_full, sr, start_s, end_s, pad_ms=pad_ms)
+        # tighten to the ASR speech span (clip-relative) when available, to drop
+        # leading/trailing silence/music beyond the VAD boundary.
+        sp = span.get(r["clip"])
+        if sp and pd.notna(sp[0]) and pd.notna(sp[1]) and sp[1] > sp[0]:
+            a, b = start_s + float(sp[0]), start_s + float(sp[1])
+            a, b = max(start_s, a), min(end_s, b)
+        else:
+            a, b = start_s, end_s
+        y = trim_to_window(y_full, sr, a, b, pad_ms=pad_ms)
         y = normalize_loudness(y, sr, n["target_lufs"], n["peak_ceiling_dbfs"])
         y = pad_silence(y, sr, n["head_silence_ms"], n["tail_silence_ms"])
         save_wav(out_dir / r["clip"], y, sr,

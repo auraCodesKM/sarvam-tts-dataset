@@ -1,7 +1,7 @@
 stage,clips,surviving_pct
 Segmented (VAD utterances),582,100.0
 Passed acoustic QC,475,81.6
-Transcribed (Sarvam STT),467,80.2
-Passed single-speaker + language,467,80.2
+Transcribed (Sarvam STT),475,81.6
+Passed single-speaker + language,475,81.6
 Human-reviewed (decided),0,0.0
 ACCEPTED into dataset,0,0.0

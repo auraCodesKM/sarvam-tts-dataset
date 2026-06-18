@@ -30,6 +30,15 @@ def lang_of(source_id: str, sources: dict) -> str:
     return "hi-IN" if source_id.startswith("hi") else "en-IN"
 
 
+def speech_span(resp: dict):
+    """(start, end) seconds of detected speech within the clip, from saarika's
+    timestamp arrays — used by s07 for precise edge-trimming."""
+    ts = resp.get("timestamps") or {}
+    st = ts.get("start_time_seconds") or []
+    en = ts.get("end_time_seconds") or []
+    return (min(st) if st else None, max(en) if en else None)
+
+
 def n_speakers(resp: dict) -> int:
     dia = resp.get("diarized_transcript") or {}
     entries = dia.get("entries") or []
@@ -67,12 +76,14 @@ def main():
         except Exception as e:
             log.error("[%s] transcribe failed: %s", r["clip"], e)
             continue
+        sp_start, sp_end = speech_span(resp)
         rows.append({
             "clip": r["clip"], "source_id": r.source_id,
             "language_requested": lang,
             "language_code": resp.get("language_code", lang),
             "language_probability": resp.get("language_probability"),
             "n_speakers": n_speakers(resp),
+            "speech_start_s": sp_start, "speech_end_s": sp_end,
             "transcript": (resp.get("transcript") or "").strip(),
         })
     df = pd.DataFrame(rows)
