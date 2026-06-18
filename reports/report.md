@@ -67,16 +67,19 @@ Hindi talks):
 
 | Stage | Clips | Surviving |
 |---|---:|---:|
-| Segmented (VAD utterances) | 560 | 100.0% |
-| Passed acoustic QC (pre-ASR) | 455 | 81.2% |
-| Transcribed (Sarvam `saarika:v2.5`) | 447 | 79.8% |
-| Passed language + transcript-sanity | 447 | 79.8% |
+| Segmented (VAD utterances) | 582 | 100.0% |
+| Passed acoustic QC (pre-ASR) | 475 | 81.6% |
+| Transcribed (Sarvam `saarika:v2.5`) | 467 | 80.2% |
+| Passed language + transcript-sanity | 467 | 80.2% |
 | Human-reviewed (decided) | *pending listen* | — |
 | **Accepted into dataset** | *pending* | — |
 
-The verified pool is **36.2 min English (227 clips) + 23.5 min Hindi (220 clips) =
-59.7 min**, every clip transcribed and language-checked, staged in
+The verified pool is **36.2 min English (227 clips) + 25.8 min Hindi (240 clips) =
+61.9 min**, every clip transcribed and language-checked, staged in
 `review/review_log.csv` for the human listen-and-correct pass (the final gate).
+Hindi landed slightly under 30 min: clean *single-speaker, CC-BY* Hindi is genuinely
+scarce on YouTube, and we chose not to pad it with multi-speaker dialogues, dubbed
+audio, or AI-narrated channels — a deliberate quality-over-size call per the brief.
 A validation run earlier confirmed the back half: 63 of these normalize to clean
 24 kHz mono and `validate_dataset.py` passes all invariants. Acceptance counts and
 WER fill in from the CSVs after review.

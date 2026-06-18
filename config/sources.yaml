@@ -132,15 +132,16 @@ hindi:
     expected_emotion: [conversational, neutral, serious]
     status: candidate
     notes: "Same speaker; discourse has long pauses -> ~50% speech density."
-  - id: hi_sadhguru_purpose
-    url: "https://www.youtube.com/watch?v=bukxmmWXZbw"
+  - id: hi_sadhguru_brieflife
+    url: "https://www.youtube.com/watch?v=RBJE6SN7a_c"
     language: hi-IN
     channel: Sadhguru Hindi
     speaker: "Sadhguru (Hindi discourse)"
     content_type: discourse
-    expected_emotion: [conversational, neutral, serious]
+    expected_emotion: [serious, conversational, neutral]
     status: candidate
-    notes: "Same speaker."
+    notes: "Solo talk; same speaker. (Replaced hi_sadhguru_purpose, a '[Hindi Dub]'
+            rejected for using a different dub-artist voice — see rejected/findings.)"
   - id: hi_sadhguru_emptiness
     url: "https://www.youtube.com/watch?v=nipOTU03stI"
     language: hi-IN

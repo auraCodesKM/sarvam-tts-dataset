@@ -34,7 +34,7 @@ from .utils.io import REPO_ROOT, ensure_dir, get_logger, load_config
 log = get_logger("s06_review")
 REVIEW_CSV = REPO_ROOT / "review" / "review_log.csv"
 FIELDS = ["clip", "source_id", "language_code", "decision", "reason",
-          "asr_transcript", "final_transcript", "edit_note"]
+          "asr_transcript", "final_transcript", "edit_note", "duration_s"]
 
 
 def load_log() -> dict[str, dict]:
@@ -65,14 +65,43 @@ def play(path: Path):
     log.warning("No audio player found; open manually: %s", path)
 
 
-def interactive(verified: pd.DataFrame, seg_root: Path, log_rows: dict):
+FILLERS = (" uh", " um", " uh,", " um,", "uh,", "um,")
+
+
+def _priority(row) -> float:
+    """Higher = review first. Favour ideal-length, high-SNR, low-filler clips so a
+    reviewer can accept a clean ~30 min/language quickly and stop."""
+    dur = row.get("duration_s") or 8.0
+    snr = row.get("snr_db") or 25.0
+    # duration sweet spot 5-13s (triangular preference), capped SNR contribution
+    dur_score = max(0.0, 1.0 - abs(dur - 9.0) / 9.0)
+    snr_score = min(snr, 45.0) / 45.0
+    txt = str(row.get("transcript") or "").lower()
+    filler = sum(txt.count(f) for f in FILLERS)
+    filler_pen = min(filler, 6) / 6.0
+    return 2.0 * dur_score + 1.0 * snr_score - 0.6 * filler_pen
+
+
+def interactive(verified: pd.DataFrame, seg_root: Path, log_rows: dict, targets: dict):
     pending = [r for _, r in verified.iterrows()
                if r["clip"] not in log_rows or log_rows[r["clip"]].get("decision") in ("", "PENDING")]
-    log.info("%d clips to review (%d already done)", len(pending),
-             len(verified) - len(pending))
+    pending.sort(key=_priority, reverse=True)   # best clips first
+    # running accepted seconds per language (from prior decisions)
+    acc_s = {}
+    for v in log_rows.values():
+        if v.get("decision") == "ACCEPT":
+            acc_s[v["language_code"]] = acc_s.get(v["language_code"], 0.0) + float(v.get("duration_s") or 0)
+    log.info("%d clips to review (best-quality first). Targets/min: %s",
+             len(pending), targets)
     for i, r in enumerate(pending, 1):
         clip_path = seg_root / r.source_id / r["clip"]
-        print(f"\n[{i}/{len(pending)}] {r['clip']}  ({r.language_code})")
+        mins = {k: round(v / 60, 1) for k, v in acc_s.items()}
+        tgt = targets.get(r.language_code)
+        done = tgt and acc_s.get(r.language_code, 0) >= tgt * 60
+        flag = "  <-- target reached" if done else ""
+        print(f"\n[{i}/{len(pending)}] {r['clip']}  ({r.language_code}, "
+              f"{r.get('duration_s','?')}s, SNR {r.get('snr_db','?')}) "
+              f"accepted so far: {mins}{flag}")
         print(f"  ASR: {r.transcript}")
         while True:
             print("  [p]lay  [a]ccept  [r]eject  [e]dit+accept  [s]kip  [q]uit")
@@ -84,7 +113,9 @@ def interactive(verified: pd.DataFrame, seg_root: Path, log_rows: dict):
                     language_code=r.language_code, decision="ACCEPT",
                     reason="clean single-speaker, transcript correct",
                     asr_transcript=r.transcript, final_transcript=r.transcript,
-                    edit_note=""); break
+                    edit_note="", duration_s=r.get("duration_s"))
+                acc_s[r.language_code] = acc_s.get(r.language_code, 0.0) + float(r.get("duration_s") or 0)
+                break
             elif c == "e":
                 newt = input(f"  corrected transcript:\n    [{r.transcript}]\n  > ").strip()
                 note = input("  edit note: ").strip()
@@ -92,13 +123,15 @@ def interactive(verified: pd.DataFrame, seg_root: Path, log_rows: dict):
                     language_code=r.language_code, decision="ACCEPT",
                     reason="accepted with transcript correction",
                     asr_transcript=r.transcript, final_transcript=newt or r.transcript,
-                    edit_note=note); break
+                    edit_note=note, duration_s=r.get("duration_s"))
+                acc_s[r.language_code] = acc_s.get(r.language_code, 0.0) + float(r.get("duration_s") or 0)
+                break
             elif c == "r":
                 reason = input("  reject reason: ").strip() or "manual reject"
                 log_rows[r["clip"]] = dict(clip=r["clip"], source_id=r.source_id,
                     language_code=r.language_code, decision="REJECT",
                     reason=reason, asr_transcript=r.transcript,
-                    final_transcript="", edit_note=""); break
+                    final_transcript="", edit_note="", duration_s=r.get("duration_s")); break
             elif c == "s":
                 break
             elif c == "q":
@@ -117,6 +150,12 @@ def main():
     seg_root = REPO_ROOT / cfg["paths"]["segments_dir"]
     verified = pd.read_csv(REPO_ROOT / "data" / "verified.csv")
     verified = verified[verified.verify_pass]
+    # join acoustic metrics for priority ordering + minute tracking
+    aq = REPO_ROOT / "data" / "acoustic_qc.csv"
+    if aq.exists():
+        m = pd.read_csv(aq)[["clip", "duration_s", "snr_db"]]
+        verified = verified.merge(m, on="clip", how="left")
+    targets = cfg["dataset"].get("target_split", {})
     log_rows = load_log()
 
     if args.report or (not args.interactive and not args.auto_stage):
@@ -137,12 +176,12 @@ def main():
             log_rows.setdefault(r["clip"], dict(clip=r["clip"], source_id=r.source_id,
                 language_code=r.language_code, decision="PENDING", reason="",
                 asr_transcript=r.transcript, final_transcript=r.transcript,
-                edit_note=""))
+                edit_note="", duration_s=r.get("duration_s")))
         write_log(log_rows)
         log.info("Staged %d clips as PENDING in %s", len(log_rows), REVIEW_CSV)
         return
 
-    interactive(verified, seg_root, log_rows)
+    interactive(verified, seg_root, log_rows, targets)
 
 
 if __name__ == "__main__":

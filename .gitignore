@@ -21,3 +21,6 @@ data/hf_dataset/
 
 # OS
 .DS_Store
+
+# local listening samples (audio, not for repo)
+review_samples/
