@@ -1,0 +1,108 @@
+# =============================================================================
+# pipeline.yaml — ALL tunable thresholds for the TTS dataset pipeline.
+#
+# Every value here is a *curation decision*. Comments record the rationale so a
+# reviewer can see the judgment, and so iterations (v0->v1->v2) are auditable by
+# diffing this file in git. Nothing about quality is hidden in code.
+# =============================================================================
+
+seed: 1337                      # fixed for reproducible sampling/shuffling
+
+paths:
+  raw_dir: data/raw             # downloaded source audio (gitignored)
+  segments_dir: data/segments   # VAD utterances (gitignored)
+  clips_dir: data/clips         # final normalized clips (gitignored)
+  cache_dir: data/cache         # Sarvam response cache, keyed by clip sha256
+  manifest: data/manifest.csv   # the one tracked data artifact (provenance)
+
+# --- Stage 2: VAD segmentation -----------------------------------------------
+segment:
+  # silero-vad parameters. We segment to sentence-level utterances rather than
+  # fixed 30/60s windows: LJSpeech averages ~6.6s and neural TTS trains best on
+  # coherent, single-breath utterances with clean silence boundaries.
+  vad_threshold: 0.5            # speech probability cutoff (silero default)
+  min_speech_ms: 2000           # drop sub-2s fragments (too short to be useful)
+  min_silence_ms: 350           # silence that splits utterances; <0.35s keeps
+                                #   natural intra-sentence pauses together
+  speech_pad_ms: 120            # padding kept around speech to avoid clipped
+                                #   onsets/offsets (re-trimmed precisely later)
+  target_min_s: 4.0             # acceptable clip duration window...
+  target_max_s: 18.0            # ...18s upper bound keeps clips <30s (Sarvam
+                                #   REST limit) and memory-friendly for TTS
+  hard_max_s: 22.0              # clips longer than this are re-split / dropped
+
+# --- Stage 3: Acoustic QC (pre-ASR, costs zero Sarvam credits) ---------------
+acoustic_qc:
+  # Run BEFORE any API call so credits are only ever spent on plausibly-good
+  # audio. Thresholds chosen for *TTS-grade* cleanliness, stricter than ASR.
+  min_snr_db: 22.0              # speech vs. noise-floor (VAD-masked). 22dB is a
+                                #   pragmatic floor for YouTube; studio is 30+.
+                                #   Tuned up from 15 after v0 let through hiss.
+  max_clipping_ratio: 0.01      # ITERATION v0->v1: was 0.001. Web audio is
+                                #   loudness-maximized so a tiny fraction of
+                                #   samples legitimately touch full-scale without
+                                #   audible distortion; >1% indicates real digital
+                                #   clipping. (See report: data-quality iterations.)
+  true_peak_dbfs_max: 0.1       # ITERATION v0->v1: NOT a real reject gate. v0 used
+                                #   -0.5 and killed 83/88 clips purely because the
+                                #   source peaks near 0dBFS (normal for YouTube).
+                                #   Peak handling belongs in s07 normalization
+                                #   (limit to -1dBFS), not pre-ASR rejection. Set
+                                #   to 0.1 so it effectively never fires; we still
+                                #   measure & record peak_dbfs for the report.
+  min_lufs: -33.0               # too quiet -> noise-dominated after normalization
+  max_lufs: -12.0               # too hot / compressed
+  max_nonspeech_ratio: 0.35     # >35% silence/non-speech in a "speech" clip is
+                                #   usually music stings or dead air
+  min_duration_s: 4.0
+  max_duration_s: 18.0
+
+# --- Stage 4: Transcription (Sarvam STT) -------------------------------------
+transcribe:
+  model: saaras:v2.5            # Sarvam STT; see sarvam_client for endpoint
+  # mode is chosen per-clip: 'transcribe' default; Hindi clips with heavy
+  # English use code-mix handling. Word timestamps + diarization requested.
+  with_timestamps: true
+  with_diarization: true
+
+# --- Stage 5: Speaker + language verification --------------------------------
+verify:
+  max_speakers: 1               # reject any clip with >1 diarized speaker_id
+  min_language_probability: 0.70 # below this the clip's language is ambiguous
+  # language must match the source's declared language (en-IN / hi-IN)
+
+# --- Stage 6: Alignment + human review ---------------------------------------
+review:
+  edge_trim_pad_ms: 80          # silence kept at clip edges after timestamp trim
+  # the human review harness writes review/review_log.csv
+
+# --- Stage 7: Normalization (final audio) ------------------------------------
+normalize:
+  sample_rate: 24000            # 24kHz: modern neural-TTS standard (VITS/XTTS/
+                                #   Fastpitch). Higher fidelity than LJSpeech's
+                                #   22.05kHz, still compact.
+  channels: 1                   # mono
+  bit_depth: 16                 # 16-bit PCM WAV
+  target_lufs: -23.0            # EBU R128 integrated loudness; uniform perceived
+                                #   volume across clips (important for TTS)
+  peak_ceiling_dbfs: -1.0       # post-normalization true-peak limit
+  head_silence_ms: 100          # uniform short silence padding...
+  tail_silence_ms: 200          # ...tail slightly longer (natural utterance decay)
+
+# --- Stage 8: Emotion / style tagging ----------------------------------------
+emotion:
+  # Sarvam LLM proposes a candidate from transcript+context; a human confirms by
+  # listening. We tag conservatively — most lecture/audiobook content is
+  # neutral/formal/conversational, and we document this limitation honestly.
+  allowed_tags: [neutral, happy, sad, excited, angry, formal, whisper,
+                 conversational, energetic, serious]
+  default_tag: neutral
+
+# --- Dataset assembly --------------------------------------------------------
+dataset:
+  hf_repo_id: auraCodes/indian-english-hindi-tts-60min
+  target_total_minutes: 60
+  target_split:                 # ~30/30; tracked live in the manifest
+    en-IN: 30
+    hi-IN: 30
+  oversample_factor: 1.6        # collect ~1.6x candidates to survive the funnel

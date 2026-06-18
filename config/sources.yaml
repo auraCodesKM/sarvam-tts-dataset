@@ -1,0 +1,102 @@
+# =============================================================================
+# sources.yaml — curated candidate sources (the highest-leverage manual step).
+#
+# CURATION THESIS
+# ---------------
+# For a small (60-min) TTS set, *acoustic consistency + clean licensing* beat
+# diversity. We therefore anchor on NPTEL (nptelhrd and sibling official IIT/
+# IISc channels): university lectures that are (a) single-speaker per course,
+# (b) recorded in controlled conditions, (c) abundant in BOTH Indian English and
+# Hindi, and — decisively — (d) carry the *YouTube Creative Commons Attribution
+# flag*, which we verify PROGRAMMATICALLY at fetch time (see s01_fetch.py:
+# license must == "Creative Commons Attribution license (reuse allowed)").
+#
+# This is the strongest licensing position available for a PUBLIC dataset: not
+# "we believe it's reusable" but "YouTube's own metadata marks it reuse-allowed,
+# and we recorded that flag per clip in the manifest." Because NPTEL is CC-BY,
+# the published dataset is licensed CC-BY-4.0 with attribution to each source.
+#
+# SPEAKER DIVERSITY: we pick MULTIPLE courses (different professors) per language
+# so the set isn't a single voice, while each *course* stays single-speaker.
+#
+# STATUS field: 'candidate' sources are license-verified but still require a
+# human listen-pass (audio quality / true single-speaker) before 'confirmed'.
+# Final clip selection happens after download + manual review — by design.
+#
+# license_required is enforced by the pipeline; any video failing it is dropped
+# and logged, so this file can list playlists/channels broadly and let the gate
+# filter. Prefer specific course playlists for predictable single-speaker audio.
+# =============================================================================
+
+license_required: "Creative Commons Attribution license (reuse allowed)"
+dataset_license: "CC-BY-4.0"   # compatible with NPTEL CC-BY-(SA) attribution
+
+# ----------------------------------------------------------------------------
+# INDIAN ENGLISH (~30 min target)
+# ----------------------------------------------------------------------------
+english:
+  - id: en_nptel_lecture_demo
+    url: "https://www.youtube.com/watch?v=IVz3N68fF1c"
+    language: en-IN
+    channel: nptelhrd
+    speaker: "NPTEL lecturer (Psychrometry course)"
+    content_type: lecture
+    expected_emotion: [neutral, formal]
+    status: candidate           # license CC-BY verified 2026-06; needs listen QC
+    notes: >
+      Single instructor, ~21 min, clean lecture audio. Verified license field ==
+      CC-BY via yt-dlp. Domain jargon (thermodynamics) is a known ASR-error
+      source — useful material for the "transcription errors" observations.
+
+  # Add 2-3 more English-medium NPTEL courses (different professors) here for
+  # speaker diversity. Recommended discovery: browse official channels
+  #   https://www.youtube.com/user/nptelhrd/playlists
+  #   https://www.youtube.com/@npteliitd
+  # pick humanities/management courses (cleaner diction, less jargon than
+  # engineering) e.g. soft-skills / English / management / philosophy lectures.
+  # Each added URL is auto license-checked at fetch.
+
+# ----------------------------------------------------------------------------
+# HINDI (~30 min target)
+# ----------------------------------------------------------------------------
+hindi:
+  # NPTEL runs Hindi-medium and Hindi-translated courses (e.g. "Human Computer
+  # Interaction (In Hindi)"). Use the OFFICIAL channels only — reuploads
+  # ("MY SWAYAM", answer channels) are NOT CC-BY and the gate will reject them.
+  # Discovery: search the official channels for course titles containing
+  # "(in Hindi)" / "हिंदी". Anchor candidate to be confirmed by listening:
+  - id: hi_nptel_hindi_course
+    url: "PLACEHOLDER_HINDI_NPTEL_VIDEO"   # fill from official channel; license auto-checked
+    language: hi-IN
+    channel: nptelhrd / NPTEL-NOC IITM
+    speaker: "NPTEL Hindi-medium instructor"
+    content_type: lecture
+    expected_emotion: [neutral, formal, conversational]
+    status: needs_human_pick     # requires listen to confirm clean single speaker
+    notes: >
+      Hindi lecture content for code-mix handling (Hindi with English technical
+      terms). Use Sarvam 'codemix'-friendly transcription. Confirm by ear that
+      the recording is clean and single-speaker before committing.
+
+  # FALLBACK if NPTEL Hindi audio quality is poor on listen: public-domain Hindi
+  # literary audiobooks. Premchand (d. 1936) is public domain in India (life+60y),
+  # and expressive narration adds emotion diversity beyond neutral lectures.
+  # Must still pass the YouTube CC/PD license gate or be sourced from a
+  # confirmed public-domain channel (record the basis in notes).
+
+# ----------------------------------------------------------------------------
+# REJECTED source categories (documented judgment — goes in the report)
+# ----------------------------------------------------------------------------
+rejected:
+  - source: "TED / TEDx talks"
+    reason: "Licensed CC BY-NC-ND — the NoDerivatives clause forbids creating a
+             derivative segmented dataset. Excluded despite clean audio."
+  - source: "All India Radio / Prasar Bharati archives"
+    reason: "Recordings sold under paid commercial/non-commercial licenses; no
+             open reuse license. Excluded."
+  - source: "NPTEL reupload channels (MY SWAYAM, answer/coaching channels)"
+    reason: "Re-hosted without the CC-BY flag; provenance/licensing unclear. The
+             fetch-time license gate rejects these automatically."
+  - source: "General Indian news / podcast clips"
+    reason: "Standard YouTube license (no reuse right) + frequent multi-speaker
+             overlap and background music. Excluded."

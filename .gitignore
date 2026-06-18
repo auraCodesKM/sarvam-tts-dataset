@@ -1,0 +1,23 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+.env
+
+# Data — large/derived artifacts are NOT tracked. The manifest + review logs ARE.
+data/raw/
+data/segments/
+data/clips/
+data/cache/stt/
+data/cache/chat/
+data/hf_dataset/
+!data/manifest.csv
+
+# keep these tracked (curation evidence + reproducibility):
+!data/cache/api_usage.log
+!review/review_log.csv
+!reports/funnel.csv
+!reports/wer.json
+
+# OS
+.DS_Store

@@ -1,0 +1,4 @@
+stage,clips,surviving_pct
+Segmented (VAD utterances),88,100.0
+Passed acoustic QC,63,71.6
+Transcribed (Sarvam STT),0,0.0
