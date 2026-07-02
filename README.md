@@ -48,9 +48,9 @@ sources.yaml → s01 fetch → s02 segment → s03 acoustic QC → s04 transcrib
 (licence gate)  (yt-dlp)    (silero-VAD)   (SNR/clip/loud)   (Sarvam STT, cached)
 
  s05 verify → s06 review → s07 normalize → s08 emotion → s09 build → HF Hub
- (lang +      (human:        (24 kHz mono,   (LLM tag +    (manifest +
-  transcript)  listen + fix)  loudnorm,       human         push_to_hub)
-                              edge-trim)       confirm)
+ (lang +      (human:        (24 kHz mono,   (LLM tag      (manifest +
+  transcript)  listen + fix)  loudnorm,       from text)    push_to_hub)
+                              edge-trim)
 ```
 
 Each stage is an independent, resumable module under `src/`. All thresholds live in
@@ -96,9 +96,9 @@ tests/       unit tests for the audio/QC core
   LJSpeech / Hi-Fi TTS conventions.
 - **24 kHz mono, loudness-normalized, edge-trimmed**, re-cut from the original
   high-rate source (no upsampling) - a modern neural-TTS standard.
-- **Conservative emotion tagging** (LLM candidate, human-confirmed). Lecture and
-  narration content skews neutral/formal; this limitation is documented rather than
-  inflated.
+- **Conservative emotion tagging** (Sarvam-LLM candidate from transcript text, not
+  re-verified by ear). Lecture and narration content skews neutral/formal; this
+  limitation is documented rather than inflated.
 
 ## Licence and ethics
 

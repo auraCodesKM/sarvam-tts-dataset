@@ -28,8 +28,8 @@ sources.yaml ─► s01 fetch ─► s02 segment ─► s03 acoustic QC ─► s
 (license gate)   (yt-dlp)     (silero-VAD)   (SNR/clip/loud)    (Sarvam STT,cached)
 
  s05 verify ─► s06 review ─► s07 normalize ─► s08 emotion ─► s09 build ─► HF Hub
- (1-speaker)   (HUMAN: listen  (mono/24kHz/    (LLM cand. +   (manifest +
-  +language)    +correct text)  loudnorm)       human conf.)   push_to_hub)
+ (1-speaker)   (HUMAN: listen  (mono/24kHz/    (LLM tag,      (manifest +
+  +language)    +correct text)  loudnorm)       from text)     push_to_hub)
 ```
 
 Key properties:
@@ -49,7 +49,7 @@ Key properties:
 | Clip length | **4–18 s, VAD sentence-level** | Coherent TTS units with clean silence edges (LJSpeech avg ≈ 6.6 s); the brief explicitly allows "any combination totaling ~60 min." |
 | Final audio | **mono, 24 kHz, 16-bit, −23 LUFS, trimmed** | Modern neural-TTS standard; clips re-cut from the **original 48 kHz** source (no upsampling). |
 | Second language | **Hindi** | Highest Sarvam ASR accuracy among Indian languages and personally QA-able (Devanagari + romanized). |
-| Emotion | **LLM candidate → human confirm** | Emotion is acoustic; text alone can't decide it. Tag conservatively and document the limitation. |
+| Emotion | **LLM candidate from transcript text** | Emotion is fundamentally acoustic; text alone can't fully decide it, so tags are conservative and the limitation is documented rather than hidden behind a claim of audio verification. |
 
 ---
 
