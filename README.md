@@ -11,7 +11,7 @@ credit-frugal; the judgment lives in source selection, QC-gate design, threshold
 calibration against real data, and honest documentation of what worked and what did
 not.
 
-- **Hugging Face dataset:** `auraCodes/indian-english-hindi-tts-60min` *(published after the review pass)*
+- **Hugging Face dataset:** [`auraCodes/indian-english-hindi-tts-60min`](https://huggingface.co/datasets/auraCodes/indian-english-hindi-tts-60min)
 - **Report:** [`reports/report.pdf`](reports/report.pdf)
 - **Design rationale:** [`PLAN.md`](PLAN.md) · **Finish/submit checklist:** [`NEXT_STEPS.md`](NEXT_STEPS.md)
 
@@ -20,12 +20,13 @@ not.
 | Property | Value |
 |---|---|
 | Languages | Indian English (`en-IN`), Hindi (`hi-IN`) |
-| Target duration | ~30 min per language (~60 min total) |
+| Final size | 555 clips, 73.2 min (37.7 min English, 35.5 min Hindi) |
 | Audio format | mono, 24 kHz, 16-bit PCM WAV, loudness-normalized (−23 LUFS), silence-trimmed |
 | Clip length | sentence-level utterances, ~4–18 s (VAD-segmented) |
 | English source | NPTEL *Psychrometry* lectures (`nptelhrd`), single instructor, CC-BY |
 | Hindi source | Bhoopendra Pandey — single-narrator reading of Premchand's essay *"साहित्य का उद्देश्य"*, CC-BY |
 | Per-clip fields | `audio`, `text`, `language`, `emotion`, `duration_s`, `speaker`, `source_url`, `license`, `snr_db`, `lufs` |
+| ASR quality | WER 0.05% (en-IN), 0.0% (hi-IN) vs. human-corrected transcripts |
 | Licence | CC-BY-4.0, with per-clip attribution recorded in the manifest |
 
 ## What this submission does differently

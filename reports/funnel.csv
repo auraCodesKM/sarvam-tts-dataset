@@ -3,5 +3,5 @@ Segmented (VAD utterances),640,100.0
 Passed acoustic QC,558,87.2
 Transcribed (Sarvam STT),558,87.2
 Passed single-speaker + language,558,87.2
-Human-reviewed (decided),0,0.0
-ACCEPTED into dataset,0,0.0
+Human-reviewed (decided),558,87.2
+ACCEPTED into dataset,555,86.7

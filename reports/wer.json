@@ -1,0 +1,14 @@
+{
+  "en-IN": {
+    "n": 225,
+    "wer": 0.0005,
+    "cer": 0.0001,
+    "pct_clips_edited": 0.4
+  },
+  "hi-IN": {
+    "n": 330,
+    "wer": 0.0,
+    "cer": 0.0,
+    "pct_clips_edited": 0.0
+  }
+}

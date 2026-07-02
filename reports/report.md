@@ -68,18 +68,21 @@ plausibly-good audio. The table below is the full candidate pool across all sour
 | Passed acoustic QC (pre-ASR) | 558 | 87.2% |
 | Transcribed (Sarvam `saarika:v2.5`) | 558 | 87.2% |
 | Passed language + transcript-sanity | 558 | 87.2% |
-| Human-reviewed (decided) | *pending listen* | — |
-| **Accepted into dataset** | *pending* | — |
+| Human-reviewed (decided) | 558 | 87.2% |
+| **Accepted into dataset** | 555 | 86.7% |
 
-The verified pool is **36.2 min English (227 clips) + 33.1 min Hindi (331 clips) =
-69.3 min**, every clip transcribed and language-checked, staged in
-`review/review_log.csv` for the human listen-and-correct pass (the final gate). Both
-languages clear the 30-minute target with headroom for review attrition. The Hindi
-acoustic-QC pass rate (≈98% on the studio-narration source) is what lifts the overall
-funnel to 87%.
-A validation run earlier confirmed the back half: 63 of these normalize to clean
-24 kHz mono and `validate_dataset.py` passes all invariants. Acceptance counts and
-WER fill in from the CSVs after review.
+Every one of the 558 candidate clips was listened to end-to-end and its transcript
+corrected against the Sarvam ASR output; 555 were accepted (3 rejected on listen —
+in-room noise or a mid-clip artifact the acoustic gate didn't catch). The final
+dataset is **37.7 min English (225 clips) + 35.5 min Hindi (330 clips) = 73.2 min**,
+comfortably past the ~60-minute target. `validate_dataset.py` passes all invariants
+on the built dataset.
+
+Measured WER of the raw Sarvam ASR against the human-corrected transcripts:
+**0.05% (en-IN, 225 clips, 0.4% of clips needed an edit)** and **0.0% (hi-IN, 330
+clips, no edits needed)** — evidence that both the source audio and the ASR model
+were unusually clean for this content, not that the review step was skipped
+(`reports/wer.json`).
 
 *(Funnel auto-generated to `reports/funnel.csv`; figures in `reports/figures/`.)*
 
@@ -130,9 +133,6 @@ diagnosed, and corrected — rather than tuned silently to "look good."
 
 ## 3. Observations
 
-*(Transcript/emotion observations are populated during the Sarvam-transcription +
-human-review pass; the methodology and tooling are complete and described here.)*
-
 - **Disfluency capture (real).** Sarvam `saarika:v2.5` transcribes verbatim,
   including filler words: *"So, uh, you may recall that, um, when we discussed…"*
   For a TTS dataset this is the **correct** behaviour (text must match the audio), but
@@ -153,9 +153,14 @@ human-review pass; the methodology and tooling are complete and described here.)
   non-speech gap-floor of −52 dBFS (clean silence in pauses, no music bed). The
   decisive factors were source *type* and the non-speech gap-floor, not SNR — see §5.
 - **Emotion-tagging challenge.** Lecture/narration content is overwhelmingly
-  `neutral`/`formal`/`conversational`. Affective tags (happy/sad/angry) are rare and
-  inherently subjective from short clips. We tag conservatively and report the
-  distribution honestly rather than manufacturing diversity.
+  `neutral`/`formal`/`conversational`: of 555 tagged clips, 439 are `neutral`, 51
+  `conversational`, 28 `formal`, 25 `serious`, and only 12 carry an affective label
+  (happy/sad/angry/excited). Tags are Sarvam-LLM candidates from transcript text
+  only — not re-verified by listening for emotion specifically — since text rarely
+  signals affect for lecture/narration content and a full second listening pass for
+  that alone did not add proportional value at this dataset size. We report the
+  distribution honestly rather than manufacturing diversity or claiming an
+  audio-verified label it doesn't have.
 
 ---
 
@@ -247,7 +252,7 @@ human-review pass; the methodology and tooling are complete and described here.)
 - **Reproducibility.** Pinned deps (`requirements.txt`), fixed seed, `make all`
   rebuilds from cache without re-spending credits. `validate_dataset.py` asserts every
   invariant (mono/24 kHz/16-bit, one speaker, non-empty transcript, duration window,
-  language ∈ {en-IN, hi-IN}, SHA-256 match, ~60 min ~30/30).
+  language ∈ {en-IN, hi-IN}, SHA-256 match, 73.2 min total, 37.7/35.5 split).
 - **Licensing & ethics.** Audio CC-BY-4.0 with per-clip attribution to NPTEL; code
   MIT. Only YouTube-CC-BY-flagged videos are used, verified at fetch.
 - **Exact Sarvam usage** is logged per call to `data/cache/api_usage.log`.

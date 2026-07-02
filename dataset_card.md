@@ -19,11 +19,12 @@ size_categories:
 
 # Indian English + Hindi TTS Dataset
 
-A small, heavily-curated Text-to-Speech corpus: approximately 30 minutes of Indian
-English and 30 minutes of Hindi, comprising single-speaker, studio-grade clips with
-human-reviewed transcripts and emotion/style tags. Built for the Sarvam AI ML &
-Speech Data Pipeline assignment using a quality-first methodology — every clip was
-reviewed by ear as if it would train a production TTS model.
+A small, heavily-curated Text-to-Speech corpus: 73.2 minutes (37.7 min Indian
+English, 35.5 min Hindi) of single-speaker, studio-grade clips. Every clip's audio
+was listened to and its transcript corrected against automated Sarvam ASR output;
+resulting WER against the corrected text is 0.05% (en-IN) and 0.0% (hi-IN), showing
+both very clean source audio and very accurate ASR. Built for the Sarvam AI ML &
+Speech Data Pipeline assignment using a quality-first methodology.
 
 - **Pipeline and report:** https://github.com/auraCodesKM/sarvam-tts-dataset
 - **Licence:** CC-BY-4.0. Sources carry YouTube's Creative Commons Attribution flag,
@@ -40,7 +41,7 @@ reviewed by ear as if it would train a production TTS model.
 | `audio` | Audio(24 kHz) | mono, 16-bit PCM, loudness-normalized (−23 LUFS), silence-trimmed |
 | `text` | string | human-corrected transcript with punctuation and capitalization |
 | `language` | string | `en-IN` or `hi-IN` |
-| `emotion` | string | style/emotion tag (LLM candidate, human-confirmed) |
+| `emotion` | string | style/emotion tag: Sarvam-LLM candidate from the transcript, conservative default to `neutral`/`formal` (not independently re-verified by ear; documented as a limitation below) |
 | `duration_s` | float | clip duration in seconds |
 | `speaker` | string | source speaker / channel |
 | `source_url` | string | originating YouTube video (CC-BY) |
@@ -62,10 +63,12 @@ suitability before selection (`src/audition.py`).
 
 - **Intended use:** research and educational TTS / ASR fine-tuning for Indian English
   and Hindi; small-scale voice modeling; a worked reference for curation methodology.
-- **Limitations:** lecture and narration content skews neutral/formal, so affective
-  emotion diversity is limited (documented rather than inflated). The corpus is small
-  (~60 minutes). The English source contains domain-specific terminology
-  (thermodynamics); the Hindi source is literary prose.
+- **Limitations:** lecture and narration content skews neutral/formal (439/555
+  clips tagged `neutral`), so affective emotion diversity is limited (documented
+  rather than inflated). Emotion tags are LLM-derived from text, not independently
+  confirmed by listening to each clip. The corpus is small (~73 minutes). The
+  English source contains domain-specific terminology (thermodynamics); the Hindi
+  source is literary prose.
 - **Ethics:** only YouTube CC-BY-flagged sources are used, with attribution preserved
   per clip. Not intended for impersonation or voice cloning of identifiable
   individuals without consent.
