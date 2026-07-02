@@ -1,4 +1,4 @@
-"""Dataset invariant checks — run before publishing (and in CI).
+"""Dataset invariant checks - run before publishing (and in CI).
 
 Asserts on the manifest + audio files:
   * every clip is mono, 24 kHz, 16-bit PCM WAV

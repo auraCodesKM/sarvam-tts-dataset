@@ -1,4 +1,4 @@
-"""Stage 7 — Normalize ACCEPTED clips to final TTS format.
+"""Stage 7 - Normalize ACCEPTED clips to final TTS format.
 
 mono | 24 kHz | 16-bit PCM | loudness-normalized (EBU R128) | peak-limited |
 uniform head/tail silence padding.

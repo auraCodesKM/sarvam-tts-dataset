@@ -1,4 +1,4 @@
-"""Stage 6 — Alignment edge-trim + HUMAN REVIEW harness (the graded core).
+"""Stage 6 - Alignment edge-trim + HUMAN REVIEW harness (the graded core).
 
 This is where curation judgment is recorded. For every clip that survived the
 automated gates, the reviewer:

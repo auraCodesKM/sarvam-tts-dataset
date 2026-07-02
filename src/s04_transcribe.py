@@ -1,4 +1,4 @@
-"""Stage 4 — Transcribe acoustic-QC-passing clips with Sarvam STT (cached).
+"""Stage 4 - Transcribe acoustic-QC-passing clips with Sarvam STT (cached).
 
 Only clips with qc_pass==True are sent (credit frugality). Responses are cached
 on disk by audio sha256 (see sarvam_client), so reruns/iterations cost 0 credits.
@@ -32,7 +32,7 @@ def lang_of(source_id: str, sources: dict) -> str:
 
 def speech_span(resp: dict):
     """(start, end) seconds of detected speech within the clip, from saarika's
-    timestamp arrays — used by s07 for precise edge-trimming."""
+    timestamp arrays - used by s07 for precise edge-trimming."""
     ts = resp.get("timestamps") or {}
     st = ts.get("start_time_seconds") or []
     en = ts.get("end_time_seconds") or []

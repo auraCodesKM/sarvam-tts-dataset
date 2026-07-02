@@ -1,4 +1,4 @@
-"""Unit tests for the audio/QC core — synthetic signals, no network or credits.
+"""Unit tests for the audio/QC core - synthetic signals, no network or credits.
 
 Run: .venv/bin/python -m pytest tests/ -q   (or: python -m unittest)
 """

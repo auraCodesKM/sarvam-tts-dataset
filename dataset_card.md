@@ -29,8 +29,8 @@ Speech Data Pipeline assignment using a quality-first methodology.
 - **Pipeline and report:** https://github.com/auraCodesKM/sarvam-tts-dataset
 - **Licence:** CC-BY-4.0. Sources carry YouTube's Creative Commons Attribution flag,
   verified per clip, and are single-speaker:
-  - Indian English — NPTEL *Psychrometry* lectures (`nptelhrd`), one instructor.
-  - Hindi — a single-narrator reading of Premchand's essay *"साहित्य का उद्देश्य"*
+  - Indian English - NPTEL *Psychrometry* lectures (`nptelhrd`), one instructor.
+  - Hindi - a single-narrator reading of Premchand's essay *"साहित्य का उद्देश्य"*
     (Bhoopendra Pandey Hindi Channel); the text is public domain, the recording is
     CC-BY. Per-clip attribution and the recorded licence flag are in the manifest.
 

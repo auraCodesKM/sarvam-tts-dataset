@@ -1,4 +1,4 @@
-"""Stage 5 — Language-match + transcript-sanity verification.
+"""Stage 5 - Language-match + transcript-sanity verification.
 
 NOTE (real API constraint): per-clip diarization is NOT available on Sarvam's REST
 endpoint (batch-API only, separate pricing). So single-speaker is enforced upstream

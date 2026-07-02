@@ -2,8 +2,8 @@
 
 Produces (from the pipeline CSVs):
   * reports/funnel.csv + a markdown funnel table   (headline figure)
-  * reports/wer.json  — Sarvam ASR WER/CER vs. human-corrected transcripts
-  * reports/figures/*.png — SNR & duration histograms, per-speaker & emotion counts
+  * reports/wer.json  - Sarvam ASR WER/CER vs. human-corrected transcripts
+  * reports/figures/*.png - SNR & duration histograms, per-speaker & emotion counts
 
 WER here = error of raw Sarvam ASR measured against the human-corrected final
 transcript on every clip a reviewer edited (a real, if optimistic, proxy for ASR

@@ -1,9 +1,9 @@
-"""Stage 1 — Fetch source audio from YouTube with LICENSE VERIFICATION.
+"""Stage 1 - Fetch source audio from YouTube with LICENSE VERIFICATION.
 
 Downloads bestaudio (compressed) for each source in config/sources.yaml, but
 ONLY after verifying the YouTube license metadata matches license_required
 ("Creative Commons Attribution license (reuse allowed)"). Any source failing the
-license gate is skipped and logged — this is our automated licensing safeguard
+license gate is skipped and logged - this is our automated licensing safeguard
 for a publicly-published dataset.
 
 Provenance (id, url, channel, license, duration, sha256) is written to
@@ -40,7 +40,7 @@ def probe(url: str) -> dict:
 def fetch_one(src: dict, raw_dir: Path, license_required: str, dry_run: bool) -> dict | None:
     url = src["url"]
     if "PLACEHOLDER" in url:
-        log.warning("[%s] placeholder URL — fill in a real official-channel video", src["id"])
+        log.warning("[%s] placeholder URL - fill in a real official-channel video", src["id"])
         return None
     info = probe(url)
     lic = info.get("license") or "NA"
@@ -50,7 +50,7 @@ def fetch_one(src: dict, raw_dir: Path, license_required: str, dry_run: bool) ->
            "title": info.get("title"), "declared_language": src.get("language")}
 
     if lic != license_required:
-        log.warning("[%s] LICENSE GATE FAIL (license=%r) — skipping", src["id"], lic)
+        log.warning("[%s] LICENSE GATE FAIL (license=%r) - skipping", src["id"], lic)
         rec["license_gate"] = "FAIL"
         return rec
     rec["license_gate"] = "PASS"

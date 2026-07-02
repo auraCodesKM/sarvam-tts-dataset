@@ -1,6 +1,6 @@
 """Sarvam API client with on-disk response caching, retry, and usage logging.
 
-Design goals (from PLAN.md §6 — credit frugality):
+Design goals (from PLAN.md §6 - credit frugality):
   * Every response is cached on disk keyed by (endpoint, sha256(audio), params).
     Reruns and threshold iterations therefore cost ZERO credits.
   * Exponential backoff on 429/5xx.
@@ -55,7 +55,7 @@ class SarvamClient:
     def _require_key(self):
         if not self.api_key:
             raise SarvamError(
-                "SARVAM_API_KEY not set. Add it to .env (see .env.example) — "
+                "SARVAM_API_KEY not set. Add it to .env (see .env.example) - "
                 "get a key from https://dashboard.sarvam.ai")
 
     def _headers(self):

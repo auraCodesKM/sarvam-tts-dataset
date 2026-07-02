@@ -1,4 +1,4 @@
-# Sarvam AI – TTS Dataset Creation Assignment For Intern — ML & Speech Data Pipeline position at Sarvam
+# Sarvam AI – TTS Dataset Creation Assignment For Intern - ML & Speech Data Pipeline position at Sarvam
 
 ## Objective
 

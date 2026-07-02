@@ -24,7 +24,7 @@ not.
 | Audio format | mono, 24 kHz, 16-bit PCM WAV, loudness-normalized (−23 LUFS), silence-trimmed |
 | Clip length | sentence-level utterances, ~4–18 s (VAD-segmented) |
 | English source | NPTEL *Psychrometry* lectures (`nptelhrd`), single instructor, CC-BY |
-| Hindi source | Bhoopendra Pandey — single-narrator reading of Premchand's essay *"साहित्य का उद्देश्य"*, CC-BY |
+| Hindi source | Bhoopendra Pandey - single-narrator reading of Premchand's essay *"साहित्य का उद्देश्य"*, CC-BY |
 | Per-clip fields | `audio`, `text`, `language`, `emotion`, `duration_s`, `speaker`, `source_url`, `license`, `snr_db`, `lufs` |
 | ASR quality | WER 0.05% (en-IN), 0.0% (hi-IN) vs. human-corrected transcripts |
 | Licence | CC-BY-4.0, with per-clip attribution recorded in the manifest |
@@ -33,13 +33,13 @@ not.
 
 | Signal | Where to see it |
 |---|---|
-| Programmatic licence verification — every source must carry YouTube's *Creative Commons Attribution (reuse allowed)* flag, checked at fetch and recorded per clip | `src/s01_fetch.py`, `data/manifest.csv` |
-| Source auditioning for TTS suitability — SNR, non-speech gap-floor (continuous-music detector), and speech density profiled before committing a source | `src/audition.py` |
-| Pre-ASR acoustic gate — SNR / clipping / loudness / duration filters run before any paid API call (zero-credit rejection of bad audio) | `src/s03_acoustic_qc.py` |
-| Human-in-the-loop review — accept/reject + reason + transcript edit logged for every clip | `review/review_log.csv` |
-| Quantified ASR quality — word/character error rate of Sarvam ASR vs. human-corrected text | `reports/wer.json` |
-| Documented quality iterations — e.g. a peak-threshold that wrongly rejected 94% of clips, and a Hindi source rejected at manual review and replaced | `reports/report.pdf` |
-| Reproducible, cached, resumable rebuild — reruns cost zero credits | `Makefile`, `data/cache/` |
+| Programmatic licence verification - every source must carry YouTube's *Creative Commons Attribution (reuse allowed)* flag, checked at fetch and recorded per clip | `src/s01_fetch.py`, `data/manifest.csv` |
+| Source auditioning for TTS suitability - SNR, non-speech gap-floor (continuous-music detector), and speech density profiled before committing a source | `src/audition.py` |
+| Pre-ASR acoustic gate - SNR / clipping / loudness / duration filters run before any paid API call (zero-credit rejection of bad audio) | `src/s03_acoustic_qc.py` |
+| Human-in-the-loop review - accept/reject + reason + transcript edit logged for every clip | `review/review_log.csv` |
+| Quantified ASR quality - word/character error rate of Sarvam ASR vs. human-corrected text | `reports/wer.json` |
+| Documented quality iterations - e.g. a peak-threshold that wrongly rejected 94% of clips, and a Hindi source rejected at manual review and replaced | `reports/report.pdf` |
+| Reproducible, cached, resumable rebuild - reruns cost zero credits | `Makefile`, `data/cache/` |
 
 ## Pipeline
 
@@ -70,14 +70,14 @@ make push                        # publish the public Hugging Face dataset
 ```
 
 Sources are curated in [`config/sources.yaml`](config/sources.yaml); the fetch-time
-licence gate is the source of truth — any non-CC-BY URL is dropped and logged.
+licence gate is the source of truth - any non-CC-BY URL is dropped and logged.
 
 ## Repository layout
 
 ```
 config/      sources.yaml (curated URLs + licence), pipeline.yaml (all thresholds)
 src/         s01..s09 stages, audition.py, analyze.py, utils/ (audio, sarvam_client, io)
-review/      review_log.csv  — per-clip human decisions (the curation record)
+review/      review_log.csv  - per-clip human decisions (the curation record)
 data/        manifest.csv (tracked: checksums + provenance + QC). raw/segments/clips gitignored
 reports/     report.md / report.pdf, funnel.csv, wer.json, figures/
 run_pipeline.py   orchestrator     validate_dataset.py   dataset invariant checks
@@ -90,12 +90,12 @@ tests/       unit tests for the audio/QC core
   speaker diversity for a small corpus. English uses one NPTEL lecturer; Hindi uses
   one audiobook-style narrator. A first Hindi source (public discourse) was rejected
   at manual review for audience interaction and PA-processed audio, and replaced with
-  clean studio narration — see the report.
+  clean studio narration - see the report.
 - **Sentence-level clips (~4–18 s), not fixed 30/60 s cuts.** Voice-activity
   segmentation yields coherent utterances with clean silence boundaries, matching
   LJSpeech / Hi-Fi TTS conventions.
 - **24 kHz mono, loudness-normalized, edge-trimmed**, re-cut from the original
-  high-rate source (no upsampling) — a modern neural-TTS standard.
+  high-rate source (no upsampling) - a modern neural-TTS standard.
 - **Conservative emotion tagging** (LLM candidate, human-confirmed). Lecture and
   narration content skews neutral/formal; this limitation is documented rather than
   inflated.

@@ -1,4 +1,4 @@
-"""Stage 2 — Segment each source into sentence-level utterances via silero-vad.
+"""Stage 2 - Segment each source into sentence-level utterances via silero-vad.
 
 Why VAD over fixed 30/60s windows: TTS trains best on coherent utterances with
 clean silence boundaries (LJSpeech avg ~6.6s). VAD respects natural pauses, so
@@ -8,7 +8,7 @@ Outputs:
   data/segments/<source_id>/<source_id>_0001.wav ...   (16kHz mono, Sarvam-ready)
   data/segments/<source_id>/segments.json              (timing + source ref)
 
-Each segment is saved at 16 kHz mono (PCM) — the rate Sarvam STT accepts and
+Each segment is saved at 16 kHz mono (PCM) - the rate Sarvam STT accepts and
 small enough to be disk-frugal. Final 24 kHz normalization happens in s07 from
 the original high-rate audio, re-cut to the reviewed boundaries.
 """

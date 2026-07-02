@@ -1,16 +1,16 @@
-# Sarvam AI — TTS Dataset Assignment: Plan & Approach
+# Sarvam AI - TTS Dataset Assignment: Plan & Approach
 
 > **Purpose of this file:** a complete, self-contained execution plan so any future session
 > (or person) can pick up the work without re-deriving context. It records not just *what*
-> to do but *why* — the reasoning behind every major decision, because this assignment is
+> to do but *why* - the reasoning behind every major decision, because this assignment is
 > graded on judgment and curation, not code.
 
 ---
 
 ## 0. The assignment in one paragraph
 
-Build a **60-minute high-quality TTS training dataset** — **~30 min Indian English** +
-**~30 min Hindi** — sourced from **YouTube**, with clean single-speaker audio, accurate
+Build a **60-minute high-quality TTS training dataset** - **~30 min Indian English** +
+**~30 min Hindi** - sourced from **YouTube**, with clean single-speaker audio, accurate
 transcripts (correct punctuation/capitalization), and an emotion/style tag per clip. Publish
 it **publicly on Hugging Face** (audio + transcripts + emotion tags + dataset card), ship a
 **public GitHub repo** with the full pipeline (collection, audio processing, transcription,
@@ -18,7 +18,7 @@ metadata, dataset creation, docs), and write a **PDF report**. Sarvam APIs (ASR,
 LLM) are the intended tooling. Full assignment text is in `assignmenet.md`.
 
 **The single most important sentence in the brief (lines 149/173/193):** this is *not* a
-coding challenge — it is a **data curation + quality-assurance + judgment** exercise.
+coding challenge - it is a **data curation + quality-assurance + judgment** exercise.
 *"Prioritize data quality over dataset size, automation, or code complexity. Every clip
 should be intentionally curated and reviewed as if it will be used to train a production-grade
 TTS model."* **Everything below optimizes for that.**
@@ -29,15 +29,15 @@ TTS model."* **Everything below optimizes for that.**
 
 | Decision | Choice | Reason |
 |---|---|---|
-| Second language | **Hindi (`hi-IN`)** | Highest Sarvam ASR accuracy among Indian languages, and transcripts can be spot-checked (Devanagari + romanized). The decisive quality lever in this assignment is the ability to verify transcripts by ear/eye — pick the language you can actually QA. |
+| Second language | **Hindi (`hi-IN`)** | Highest Sarvam ASR accuracy among Indian languages, and transcripts can be spot-checked (Devanagari + romanized). The decisive quality lever in this assignment is the ability to verify transcripts by ear/eye - pick the language you can actually QA. |
 | Sarvam credits | **Low now → request more on day 1** | Assignment line 143 invites credit requests ("Sarvam is generous"). Lead time matters, so request immediately. Pipeline is also designed to be credit-frugal (see §5). |
-| Curation style | **Few clean single-speaker sources** (3–6 per language) | Audiobook/lecture/podcast-style single speakers maximize acoustic consistency and cleanliness — the LJSpeech / Hi-Fi TTS norm. Consistency beats diversity for a small 60-min set and is far easier to QA to a high bar. |
+| Curation style | **Few clean single-speaker sources** (3–6 per language) | Audiobook/lecture/podcast-style single speakers maximize acoustic consistency and cleanliness - the LJSpeech / Hi-Fi TTS norm. Consistency beats diversity for a small 60-min set and is far easier to QA to a high bar. |
 | Clip length | **6–20 s, sentence-level** (not literal 30/60 s) | LJSpeech averages ~6.6 s; sentence-level utterances are better TTS units than arbitrary 30/60 s cuts. The brief explicitly allows "any combination totaling ~60 min." Deviation is intentional and **must be justified in the report** (a judgment signal). |
 | Final audio format | **Mono, 24 kHz, 16-bit PCM WAV, loudness-normalized, silence-trimmed** | 24 kHz is a modern neural-TTS standard (higher fidelity than LJSpeech's 22.05 kHz, still compact). Mono + normalized + trimmed = clean, uniform training units. Configurable in `pipeline.yaml`. |
 
 ---
 
-## 2. Strategic read of the evaluation — what actually wins
+## 2. Strategic read of the evaluation - what actually wins
 
 Reviewers are speech-data engineers. They will reward *evidence of human curation and sound
 judgment* over pipeline cleverness. Concretely, the submission must surface these signals:
@@ -47,9 +47,9 @@ judgment* over pipeline cleverness. Concretely, the submission must surface thes
 | Manual listening / human-in-the-loop | `review/review_log.csv`: an accept/reject decision **+ reason + edit note for every candidate clip**. The report shows real edit examples. |
 | Iterative quality improvement | A documented **quality funnel** (§4) with clip counts surviving each gate, and v0→v1→v2 iteration notes. |
 | Thoughtful filtering decisions | Every threshold (SNR, duration, single-speaker, language match) is explicit in `config/pipeline.yaml` **with a written rationale**. |
-| Real understanding of TTS data | 24 kHz mono, loudness-normalized, silence-trimmed, sentence-level clips — each choice justified against LJSpeech / Hi-Fi TTS literature. |
+| Real understanding of TTS data | 24 kHz mono, loudness-normalized, silence-trimmed, sentence-level clips - each choice justified against LJSpeech / Hi-Fi TTS literature. |
 | Reproducibility | One-command resumable rebuild, pinned deps, fixed seeds, cached API calls, `manifest.csv` with SHA-256 + full provenance. |
-| Honest documentation | Report has a genuine **"what didn't work"** with concrete failed experiments, and a **quantified ASR error (WER)** metric — most candidates report neither. |
+| Honest documentation | Report has a genuine **"what didn't work"** with concrete failed experiments, and a **quantified ASR error (WER)** metric - most candidates report neither. |
 | Ethics / licensing judgment | Prefer Creative-Commons / public-domain / govt / educational sources; license recorded per clip. Critical because the dataset is **published publicly**. |
 
 **Thesis to repeat across README, dataset card, and report:** *every clip was intentionally
@@ -93,7 +93,7 @@ curated and reviewed as if it would train a production TTS model.*
 
 ---
 
-## 4. The quality funnel (the centerpiece — QC framework)
+## 4. The quality funnel (the centerpiece - QC framework)
 
 Every candidate clip flows through ordered gates. We **record how many clips die at each
 gate** → this funnel table is a headline figure in the report. Automated gates run **before**
@@ -127,7 +127,7 @@ any Sarvam call to conserve credits.
    `diarized_transcript`. Also enforce `language_code` match and a `language_probability`
    floor.
 
-6. **Alignment + transcript QC (human-in-the-loop — the graded core).** Use word timestamps
+6. **Alignment + transcript QC (human-in-the-loop - the graded core).** Use word timestamps
    to trim partial words/silence at edges. **Listen to every surviving clip**, correct
    punctuation/capitalization and ASR errors, and log the accept/reject + reason + edit in
    `review/review_log.csv`.
@@ -138,7 +138,7 @@ any Sarvam call to conserve credits.
 8. **Emotion/style tagging.** Sarvam LLM proposes a candidate tag from transcript + context;
    **a human confirms by listening**. Tag conservatively (most audiobook/lecture content is
    `neutral`/`formal`/`conversational`). *Document honestly* that emotion diversity is
-   limited and tagging is subjective — the brief explicitly expects this observation.
+   limited and tagging is subjective - the brief explicitly expects this observation.
 
 9. **Dataset assembly + publish.** Build HF `Dataset` with `Audio(sampling_rate=24000)`,
    write `metadata.jsonl`, `push_to_hub` (public), generate dataset card.
@@ -151,7 +151,7 @@ the "data quality iterations" section of the report.
 
 ## 5. Pipeline architecture (GitHub repo layout)
 
-Numbered, resumable, fully config-driven stages — mapping 1:1 to the assignment's required
+Numbered, resumable, fully config-driven stages - mapping 1:1 to the assignment's required
 scripts (collection / audio processing / transcription / metadata / dataset creation / docs).
 
 ```
@@ -211,11 +211,11 @@ sarvam-tts-dataset/
 
 ## 7. Reproducibility & provenance
 
-- **`manifest.csv`** — one row per published clip: `clip_id`, `sha256`, `source_url`,
+- **`manifest.csv`** - one row per published clip: `clip_id`, `sha256`, `source_url`,
   `license`, `speaker_id`, `start/end`, `duration`, `sample_rate`, `snr_db`, `language`,
   `emotion`, `text`, plus all QC metrics → full traceability from a published clip back to
   its exact source moment.
-- **`review_log.csv`** — accept/reject + reason + edit per candidate → documentary proof of
+- **`review_log.csv`** - accept/reject + reason + edit per candidate → documentary proof of
   manual curation.
 - **Deterministic**: fixed seeds in `pipeline.yaml`, pinned deps, `make all` rebuilds
   end-to-end from cache without re-spending credits.
@@ -236,7 +236,7 @@ sarvam-tts-dataset/
 
 ---
 
-## 9. Verification — how we'll know it's done *and* good
+## 9. Verification - how we'll know it's done *and* good
 
 - **`validate_dataset.py`** asserts on the final dataset/manifest: every clip is mono 24 kHz,
   exactly one `speaker_id`, non-empty transcript, duration within window, language ∈
@@ -252,30 +252,30 @@ sarvam-tts-dataset/
 
 ## 10. Differentiators (how this beats other submissions)
 
-1. **Quantified transcription quality** — WER of Sarvam ASR vs. hand-made gold transcripts.
+1. **Quantified transcription quality** - WER of Sarvam ASR vs. hand-made gold transcripts.
 2. **QC funnel table + distribution plots** (SNR, duration, per-speaker counts) in report & card.
 3. **Honest failed-experiments log** with concrete artifacts (e.g., aggressive-VAD over-split,
    a noisy source rejected wholesale, an emotion approach that didn't pan out).
-4. **Production-grade dataset card** — schema, per-speaker stats, licensing, intended use,
+4. **Production-grade dataset card** - schema, per-speaker stats, licensing, intended use,
    limitations, ethics.
-5. **One-command, cached, resumable rebuild** — reproducibility most submissions lack.
+5. **One-command, cached, resumable rebuild** - reproducibility most submissions lack.
 
 ---
 
 ## 11. PDF report outline (assignment-aligned)
 
 Write `reports/report.md`, export to PDF (pandoc/weasyprint). Sections, in the brief's order:
-1. **What was built** — end-to-end pipeline diagram + stage descriptions.
-2. **Data-quality iterations** — the funnel table, filters applied, issues found & fixes,
+1. **What was built** - end-to-end pipeline diagram + stage descriptions.
+2. **Data-quality iterations** - the funnel table, filters applied, issues found & fixes,
    v0→v1→v2 threshold tuning.
-3. **Observations** — common transcription errors (with examples), speaker-quality issues,
+3. **Observations** - common transcription errors (with examples), speaker-quality issues,
    emotion-tagging challenges.
-4. **What worked** — successful approaches (pre-ASR filtering, diarization single-speaker
+4. **What worked** - successful approaches (pre-ASR filtering, diarization single-speaker
    gate, caching, manual review).
-5. **What didn't work** — concrete dead ends and failed experiments.
-6. **Future improvements** — with more time/credits (e.g., more languages, audio-based
+5. **What didn't work** - concrete dead ends and failed experiments.
+6. **Future improvements** - with more time/credits (e.g., more languages, audio-based
    emotion classifier, larger gold set, MOS listening test).
-7. **Appendices** — dataset stats, WER results, licensing/ethics, exact Sarvam API usage.
+7. **Appendices** - dataset stats, WER results, licensing/ethics, exact Sarvam API usage.
 
 ---
 
@@ -284,7 +284,7 @@ Write `reports/report.md`, export to PDF (pandoc/weasyprint). Sections, in the b
 1. Scaffold repo + `config/pipeline.yaml` + `utils/sarvam_client.py` (with cache).
    **Request more Sarvam credits immediately.**
 2. Curate `config/sources.yaml`: 3–6 clean, reusably-licensed single-speaker sources per
-   language. *(Manual, highest-leverage — spend real care here.)*
+   language. *(Manual, highest-leverage - spend real care here.)*
 3. **Smoke test on ONE source** (minimal credits): run the full loop fetch→…→push a tiny
    preview dataset. Validate the whole chain before scaling.
 4. Scale to full ~30/30 min; do the manual review pass; log every decision.
@@ -293,7 +293,7 @@ Write `reports/report.md`, export to PDF (pandoc/weasyprint). Sections, in the b
 
 ---
 
-## Appendix — open items to confirm next session
+## Appendix - open items to confirm next session
 
 - Hugging Face account/org + write token ready? (`HF_TOKEN`)
 - GitHub account/org for the public repo?

@@ -1,4 +1,4 @@
-"""Stage 3 — Acoustic QC gate (runs BEFORE any Sarvam call => costs 0 credits).
+"""Stage 3 - Acoustic QC gate (runs BEFORE any Sarvam call => costs 0 credits).
 
 For each segment we measure SNR, clipping, true-peak, loudness, and non-speech
 ratio, then PASS/FAIL against config thresholds. Only PASS clips proceed to

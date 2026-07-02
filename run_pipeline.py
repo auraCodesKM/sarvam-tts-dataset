@@ -1,4 +1,4 @@
-"""Orchestrator — run pipeline stages in order, resumable from cache.
+"""Orchestrator - run pipeline stages in order, resumable from cache.
 
   python run_pipeline.py --until s05            # run s01..s05
   python run_pipeline.py --stage s03            # run one stage

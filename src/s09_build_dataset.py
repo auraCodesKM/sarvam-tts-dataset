@@ -1,4 +1,4 @@
-"""Stage 9 — Assemble the manifest + HF dataset and (optionally) push to Hub.
+"""Stage 9 - Assemble the manifest + HF dataset and (optionally) push to Hub.
 
 Joins accepted clips with their QC metrics, transcripts, emotion tags, and source
 provenance into data/manifest.csv (the single tracked data artifact, with SHA-256

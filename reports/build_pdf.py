@@ -37,7 +37,7 @@ def main():
     fig_html = ""
     if figs:
         imgs = "".join(f'<img src="figures/{p.name}"/>' for p in figs)
-        fig_html = f'<h2>Appendix — Figures</h2><div class="figs">{imgs}</div>'
+        fig_html = f'<h2>Appendix - Figures</h2><div class="figs">{imgs}</div>'
 
     html = f"<html><head><meta charset='utf-8'><style>{CSS}</style></head><body>{html_body}{fig_html}</body></html>"
     HTML(string=html, base_url=str(HERE)).write_pdf(HERE / "report.pdf")

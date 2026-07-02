@@ -1,9 +1,9 @@
-"""Stage 8 — Emotion/style tagging: Sarvam LLM candidate -> human confirm.
+"""Stage 8 - Emotion/style tagging: Sarvam LLM candidate -> human confirm.
 
 The LLM proposes ONE tag from the allowed set using the transcript (+ content
 type) as context. This is a *candidate only*: emotion is an acoustic property the
 text often can't reveal, so a human confirms by listening (review/emotion_log.csv).
-We tag conservatively — lecture/audiobook content skews neutral/formal — and the
+We tag conservatively - lecture/audiobook content skews neutral/formal - and the
 report documents this limitation honestly (the brief explicitly expects it).
 
 Output: data/emotion_tags.csv (clip, llm_tag, final_tag, confirmed)
@@ -24,7 +24,7 @@ SYSTEM = (
     "You label the speaking STYLE/EMOTION of a short speech clip given only its "
     "transcript. Reply with EXACTLY ONE word from this set and nothing else: "
     "{tags}. Most lecture/narration content is 'neutral', 'formal', or "
-    "'conversational' — only choose an affective tag (happy/sad/excited/angry) "
+    "'conversational' - only choose an affective tag (happy/sad/excited/angry) "
     "when the wording clearly signals it.")
 
 
