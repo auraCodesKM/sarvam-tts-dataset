@@ -1,0 +1,21 @@
+{
+  "title": "Indian English + Hindi TTS Speech Dataset (Curated, 73 min)",
+  "id": "auracodeskm/indian-english-hindi-tts-dataset",
+  "licenses": [{"name": "CC-BY-4.0"}],
+  "keywords": [
+    "speech",
+    "text to speech",
+    "tts",
+    "hindi",
+    "indian english",
+    "speech recognition",
+    "audio",
+    "nlp",
+    "asr",
+    "voice",
+    "speech synthesis",
+    "india",
+    "linguistics",
+    "audio data"
+  ]
+}

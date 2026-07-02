@@ -27,3 +27,6 @@ review_samples/
 
 # source-audition slices (audio, not for repo)
 data/audition/
+
+# staged Kaggle upload copy (large audio, rebuilt by kaggle/publish.sh)
+kaggle/upload/
