@@ -10,5 +10,32 @@
     "languages",
     "deep learning"
   ],
-  "expectedUpdateFrequency": "never"
+  "expectedUpdateFrequency": "never",
+  "resources": [
+    {
+      "path": "manifest.csv",
+      "description": "One row per audio clip: human-corrected transcript, language, speaking-style tag, acoustic QC metrics (SNR, LUFS), raw ASR output for WER benchmarking, and full provenance (source URL, license, SHA-256).",
+      "schema": {
+        "fields": [
+          {"name": "clip_id", "description": "Filename stem; joins to clips/<clip_id>.wav", "type": "string"},
+          {"name": "audio_path", "description": "Original repo-relative path; on Kaggle use clips/<clip_id>.wav", "type": "string"},
+          {"name": "language", "description": "BCP-47 tag: en-IN (Indian English) or hi-IN (Hindi)", "type": "string"},
+          {"name": "text", "description": "Human-corrected transcript (the training target)", "type": "string"},
+          {"name": "emotion", "description": "Speaking-style tag, LLM-derived from transcript text (conservative; not audio-verified)", "type": "string"},
+          {"name": "duration_s", "description": "Clip duration in seconds (4-18 s design window)", "type": "number"},
+          {"name": "sample_rate", "description": "Audio sample rate, 24000 Hz for all clips", "type": "integer"},
+          {"name": "sha256", "description": "SHA-256 hash of the wav file (integrity check)", "type": "string"},
+          {"name": "snr_db", "description": "Estimated signal-to-noise ratio in dB", "type": "number"},
+          {"name": "lufs", "description": "Integrated loudness in LUFS (normalized near -19)", "type": "number"},
+          {"name": "language_probability", "description": "Language-ID confidence from ASR, where available", "type": "number"},
+          {"name": "speaker", "description": "Speaker/channel identifier; one speaker per language", "type": "string"},
+          {"name": "source_url", "description": "Source YouTube video URL (full provenance)", "type": "string"},
+          {"name": "source_title", "description": "Source video title", "type": "string"},
+          {"name": "license", "description": "Source license: YouTube Creative Commons Attribution", "type": "string"},
+          {"name": "asr_transcript", "description": "Raw Sarvam ASR output before human correction (for WER benchmarking)", "type": "string"},
+          {"name": "edited", "description": "True if the human reviewer changed the ASR transcript", "type": "boolean"}
+        ]
+      }
+    }
+  ]
 }

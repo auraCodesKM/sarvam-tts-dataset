@@ -1,6 +1,6 @@
 {
   "id": "kavinthakurkm/indian-english-hindi-tts-corpus-full-eda",
-  "title": "Indian English + Hindi TTS corpus: full EDA",
+  "title": "Anatomy of a bilingual TTS corpus (73 min, curated)",
   "code_file": "indian-english-hindi-tts-eda.ipynb",
   "language": "python",
   "kernel_type": "notebook",
