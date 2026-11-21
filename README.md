@@ -1,7 +1,23 @@
+<div align="center">
+
 # Indian English + Hindi TTS Dataset
 
 **A 73-minute, licence-verified Indian English and Hindi text-to-speech corpus (555 clips), built by a reproducible
 pipeline that quality-gates audio before any paid API call and puts every clip through human review.**
+
+[![ci](https://github.com/auraCodesKM/sarvam-tts-dataset/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/auraCodesKM/sarvam-tts-dataset/actions/workflows/ci.yml)
+[![Hugging Face: dataset](https://img.shields.io/badge/Hugging%20Face-dataset-FFD21E?logo=huggingface&logoColor=white)](https://huggingface.co/datasets/auraCodes/indian-english-hindi-tts-60min)
+[![Kaggle: dataset](https://img.shields.io/badge/Kaggle-dataset-20BEFF?logo=kaggle&logoColor=white)](https://www.kaggle.com/datasets/kavinthakurkm/indian-english-hindi-tts-dataset)
+[![code: MIT](https://img.shields.io/badge/code-MIT-blue)](LICENSE)
+[![data: CC BY 4.0](https://img.shields.io/badge/data-CC%20BY%204.0-lightgrey?logo=creativecommons&logoColor=white)](https://creativecommons.org/licenses/by/4.0/)
+
+![Python: 3.11](https://img.shields.io/badge/Python-3.11-3776AB?logo=python&logoColor=white)
+![Sarvam: STT + LLM](https://img.shields.io/badge/Sarvam-STT%20%2B%20LLM-1A1A1A)
+![silero: VAD](https://img.shields.io/badge/silero-VAD-4B8BBE)
+![audio: 24 kHz · −23 LUFS](https://img.shields.io/badge/audio-24%20kHz%20%C2%B7%20%E2%88%9223%20LUFS-6A1B9A)
+![size: 555 clips · 73.2 min](https://img.shields.io/badge/size-555%20clips%20%C2%B7%2073.2%20min-2E7D32)
+
+</div>
 
 - **Hugging Face:** [`auraCodes/indian-english-hindi-tts-60min`](https://huggingface.co/datasets/auraCodes/indian-english-hindi-tts-60min)
 - **Kaggle:** [`kavinthakurkm/indian-english-hindi-tts-dataset`](https://www.kaggle.com/datasets/kavinthakurkm/indian-english-hindi-tts-dataset), with an EDA notebook
